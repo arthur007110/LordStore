@@ -1,0 +1,15 @@
+.fa-sertec-spanish-icon {
+    background: url("#{resource['IconeLordStore.png']}") no-repeat !important;
+    width:20px !important;
+    height:16px !important;
+}
+@media screen and (min-width : 1000px) {
+    .verticalmenu {
+        display: none !important;
+    }
+}
+@media screen and (max-width : 1000px) {
+    .horizontalmenu {
+        display: none !important;
+    }
+}

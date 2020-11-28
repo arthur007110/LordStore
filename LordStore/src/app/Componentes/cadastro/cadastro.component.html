@@ -1,0 +1,48 @@
+<p-card [style]="{'width': '25rem', 'margin-bottom': '2em', 'margin': '0 auto'}">
+    <ng-template pTemplate="header">
+        <img alt="Card" src="https://firebasestorage.googleapis.com/v0/b/testes-firebase-fd3fd.appspot.com/o/LordStoreLogo.png?alt=media&token=5bb55db8-68b9-4c14-b7e1-2f0fad66143b">
+    </ng-template>
+    <h2>
+        <b>
+            Cadastro
+        </b>
+    </h2>
+    <div class="p-grid">
+        <div class="p-col">
+            <span class="p-float-label">
+                <input id="nome-input" type="text" pInputText [style]="{'width': '100%'}"> 
+                <label for="nome-input">Nome</label>
+            </span>
+        </div>
+        <div class="p-col">
+            <span class="p-float-label">
+                <input id="sobrenome-input" type="text" pInputText [style]="{'width': '100%'}"> 
+                <label for="sobrenome-input">Sobrenome</label>
+            </span>
+        </div>
+        <div class="p-col-12">
+            <span class="p-float-label">
+                <input id="email-input" type="text" pInputText [style]="{'width': '100%'}"> 
+                <label for="email-input">Email</label>
+            </span>
+        </div>
+        <div class="p-col">
+            <span class="p-float-label">
+                <input type="password" pPassword [(ngModel)]="senha" [style]="{'width': '100%'}" promptLabel="Digite sua Senha" weakLabel="Senha Fraca" mediumLabel="Senha Média" strongLabel="Senha Forte"/>
+                <label for="senha-input">Senha</label>
+            </span>
+        </div>
+        <div class="p-col">
+            <span class="p-float-label">
+                <input type="password" pPassword [(ngModel)]="confirmar_senha" [style]="{'width': '100%'}" [feedback]=false/>
+                <label for="confirmar-senha-input">Confirmar Senha</label>
+            </span>
+        </div>
+        <div class="p-col-12">
+            <p-button label="Cadastrar" [style]="{'width': '100%'}"></p-button>
+        </div>
+        <div class="p-col-12">
+            <button pButton type="button" class="p-button-secondary" label="Voltar" [style]="{'width': '100%'}" (click)="irParaLogin()"></button>
+        </div>
+    </div>
+</p-card>

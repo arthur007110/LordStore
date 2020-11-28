@@ -28,7 +28,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/primeicons/primeicons.css",
+              "primeng/resources/themes/vela-orange/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "./node_modules/primeflex/primeflex.css"
             ],
             "scripts": []
           },
@@ -120,9 +125,16 @@
               "devServerTarget": "LordStore:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     }
   },
-  "defaultProject": "LordStore"
+  "defaultProject": "LordStore",
+  "cli": {
+    "analytics": "e93b017f-fd0c-4304-9194-708c215b41c4"
+  }
 }

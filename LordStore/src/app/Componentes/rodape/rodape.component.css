@@ -1,0 +1,13 @@
+a{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.huerotate{
+    filter: invert(1) sepia(1) saturate(5) hue-rotate(0deg);
+}
+
+.logo {
+    background-color: red;
+    -webkit-mask: url("https://unpkg.com/simple-icons@v3/icons/instagram.svg") no-repeat center;
+    mask: url("https://unpkg.com/simple-icons@v3/icons/instagram.svg") no-repeat center;
+}

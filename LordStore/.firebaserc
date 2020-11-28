@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "lord-store": {
+      "hosting": {
+        "LordStore": [
+          "lord-store"
+        ]
+      }
+    }
+  }
+}
