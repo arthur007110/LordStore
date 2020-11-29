@@ -1,21 +1,24 @@
+import { Carrinho } from './Carrinho';
+import { Endereco } from './Endereco';
+import { Pedido } from './Pedido';
+
 export class Cliente{
     id: string;
     nome: string;
-    sobrenome: string;
+    foto_url: string; 
     email: string;
     senha: string;
-    pedidos_id: string[];
-    carrinho_id: string;
-    enderecos_id: string[];
+    pedidos: Pedido[];
+    carrinho: Carrinho;
+    enderecos: Endereco[];
+    email_verificado: boolean;
 
-    constructor(id: string, nome: string, sobrenome: string, email: string, senha: string, pedidos_id: string[], carrinho_id: string, enderecos_id: string[]){
-        this.id = id;
+    constructor(nome: string, email: string, senha: string, pedidos: Pedido[], carrinho: Carrinho, enderecos: Endereco[]){
         this.nome = nome;
-        this.sobrenome = sobrenome;
         this.email = email;
         this.senha = senha;
-        this.pedidos_id = pedidos_id;
-        this.carrinho_id = carrinho_id;
-        this.enderecos_id = enderecos_id;
+        this.pedidos = pedidos;
+        this.carrinho = carrinho;
+        this.enderecos = enderecos;
     }
 }

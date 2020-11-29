@@ -4,6 +4,7 @@ import { MenuItem } from 'primeng/api';
 import { Categoria } from 'src/app/Modelos/Categoria';
 import { Produto } from 'src/app/Modelos/Produto';
 import { TipoProduto } from 'src/app/Modelos/TipoProduto';
+import { AuthService } from 'src/app/Servicos/auth.service';
 import { ProdutoService } from 'src/app/Servicos/produto.service';
 
 @Component({
@@ -14,12 +15,13 @@ import { ProdutoService } from 'src/app/Servicos/produto.service';
 export class MenuComponent implements OnInit {
 
   constructor(private router: Router,
-              private produtoService: ProdutoService) { }
+              private produtoService: ProdutoService,
+              public authService: AuthService) { }
 
   items_menu: MenuItem[];
   items_perfil: MenuItem[];
   carrinho: number = 2;
-  logado: boolean = true;
+  logado: boolean = false;
 
   irParaLogin(){
     this.router.navigate(['login']);
@@ -47,6 +49,9 @@ export class MenuComponent implements OnInit {
         .catch(error => {
           console.log(error);
         });
+  }
+  testar(){
+    console.log(this.authService.isLoggedIn, this.authService.clienteData);
   }
 
   ngOnInit(): void {
@@ -119,15 +124,16 @@ export class MenuComponent implements OnInit {
 
   this.items_perfil = [
     {label: 'Meus Pedidos', icon: 'fa fa-layer-group', command: () => {
-        //this.update();
+        this.router.navigate(['pedidos']);
     }},
     {label: 'Meus Endereços', icon: 'fa fa-map-marked', command: () => {
-        //this.delete();
+      this.router.navigate(['enderecos']);
     }},
     {separator: true},
-    {label: 'Sair', icon: 'fa fa-sign-out-alt', routerLink: ['/login']}
-];
-
+    {label: 'Sair', icon: 'fa fa-sign-out-alt', command: () => {
+      this.authService.SignOut();
+    }}];
+    this.logado = this.authService.isLoggedIn;
   }
 
   goToPerfil(){

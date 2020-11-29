@@ -1,13 +1,21 @@
+//Angular
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RouterModule, Routes } from '@angular/router';
 import { FormsModule }   from '@angular/forms';
+
+//Routing
+import { RouterModule, Routes } from '@angular/router';
+import { AppRoutingModule } from './app-routing.module';
+
+//Firebase
 import { AngularFireModule } from '@angular/fire';
-import { environment } from 'src/environments/environment'
+import { AngularFireAuthModule } from "@angular/fire/auth";
+import { environment } from 'src/environments/environment';
+
+//Serviços
+import { AuthService } from './Servicos/auth.service';
 
 //PrimeNG
 import {CardModule} from 'primeng/card';
@@ -27,12 +35,20 @@ import { LoginComponent } from './Componentes/login/login.component';
 import { CadastroComponent } from './Componentes/cadastro/cadastro.component';
 import { MenuComponent } from './Componentes/menu/menu.component';
 import { HomeComponent } from './Componentes/home/home.component';
-import { RodapeComponent } from './Componentes/rodape/rodape.component'
+import { RodapeComponent } from './Componentes/rodape/rodape.component';
+import { PedidosComponent } from './Componentes/pedidos/pedidos.component';
+import { EnderecosComponent } from './Componentes/enderecos/enderecos.component';
+import { ValidarEmailComponent } from './Componentes/validar-email/validar-email.component';
+import { RedefinirSenhaComponent } from './Componentes/redefinir-senha/redefinir-senha.component'
 
 // Rotas das Páginas
 const routes: Routes = [
   { path: 'cadastro', component: CadastroComponent },//Tela de Cadastro
   { path: 'login', component: LoginComponent },//Tela de Login
+  { path: 'pedidos', component: PedidosComponent },//Tela de Login
+  { path: 'enderecos', component: EnderecosComponent },//Tela de Login
+  { path: 'validar-email', component: ValidarEmailComponent },//Tela de Validação de Email
+  { path: 'redefinir-senha', component: RedefinirSenhaComponent },//Tela de Redefinição de Senha
   { path: '', component: HomeComponent },//Tela de Login
   { path: '**', component: LoginComponent },//404 Not Found Page
 ];
@@ -44,7 +60,11 @@ const routes: Routes = [
     CadastroComponent,
     MenuComponent,
     HomeComponent,
-    RodapeComponent
+    RodapeComponent,
+    PedidosComponent,
+    EnderecosComponent,
+    ValidarEmailComponent,
+    RedefinirSenhaComponent
   ],
   imports: [
     BrowserModule,
@@ -66,11 +86,12 @@ const routes: Routes = [
 
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
   ],
   exports: [
     RouterModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

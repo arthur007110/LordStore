@@ -1,12 +1,12 @@
+import { Produto } from './Produto';
+
 export class Carrinho{
     id: string;
-    cliente_id: string;
-    produtos_id: string[];
+    produtos: Produto[];
 
-    constructor( id: string, cliente_id: string, produtos_id: string[]){
+    constructor( id: string, produtos: Produto[]){
         this.id = id;
-        this.cliente_id = cliente_id;
-        this.produtos_id = produtos_id;
+        this.produtos = produtos;
     }
 
 }

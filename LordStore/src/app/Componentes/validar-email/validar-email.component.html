@@ -1,0 +1,22 @@
+<p-card [style]="{'width': '25rem', 'margin-bottom': '2em', 'margin': '0 auto'}">
+    <ng-template pTemplate="header">
+        <img alt="Card" src="https://firebasestorage.googleapis.com/v0/b/testes-firebase-fd3fd.appspot.com/o/LordStoreLogo.png?alt=media&token=5bb55db8-68b9-4c14-b7e1-2f0fad66143b">
+    </ng-template>
+    <h2>
+        <b>
+            Validar Email
+        </b>
+    </h2>
+    <div class="p-grid">
+        <div *ngIf="authService.clienteData as cliente">
+            <b>
+                <p>Nós enviamos um email de verificação para:</p>
+            </b>
+            <button [style]="{'width': '100%'}" pButton pRipple type="button" label="{{cliente.email}}" class="p-button-outlined" (click)="authService.SendVerificationMail()"></button>
+            <b style="text-align: center;">
+                <p>Porfavor verifique em sua caixa de entrada e spam, caso precise use o botão acima para reenviar o email.</p>
+            </b>
+            <button [style]="{'width': '100%'}" pButton pRipple type="button" label="Voltar Para Loja" class="p-button-outlined p-button-secondary" (click)="irParaHome()"></button>
+        </div>
+    </div>
+</p-card>

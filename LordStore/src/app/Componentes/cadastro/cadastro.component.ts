@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/Servicos/auth.service';
 
 @Component({
   selector: 'app-cadastro',
@@ -8,15 +9,26 @@ import { Router } from '@angular/router';
 })
 export class CadastroComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              public authService: AuthService) { }
 
   ngOnInit(): void {
   }
-  senha: string;
-  confirmar_senha: string;
+  nome: string = "";
+  email: string = "";
+  senha: string = "";
+  confirmar_senha: string = "";
 
   showResponse(event: any){
 
+  }
+
+  cadastrar(){
+    if(this.nome != "" && this.nome != undefined && this.email != "" && this.email != undefined && this.senha != "" && this.senha != undefined && this.confirmar_senha != "" && this.confirmar_senha != undefined){
+      if(this.senha == this.confirmar_senha){
+        this.authService.SignUp(this.email, this.senha, this.nome);
+      }
+    }
   }
 
   irParaLogin(){

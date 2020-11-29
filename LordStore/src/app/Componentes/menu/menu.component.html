@@ -1,19 +1,21 @@
 <p-menubar [model]="items_menu">
     <ng-template pTemplate="start">
-        <img src="https://firebasestorage.googleapis.com/v0/b/testes-firebase-fd3fd.appspot.com/o/Icone_LordStore-removebg-preview.png?alt=media&token=e34632a8-dece-43ec-b2cf-dd878ed02408" height="40" class="p-mr-2">
+        <a routerLink="/" routerLinkActive="active" >
+            <img src="https://firebasestorage.googleapis.com/v0/b/testes-firebase-fd3fd.appspot.com/o/Icone_LordStore-removebg-preview.png?alt=media&token=e34632a8-dece-43ec-b2cf-dd878ed02408" height="40" class="p-mr-2">
+        </a>
     </ng-template>
     <ng-template pTemplate="end">
         <div class="horizontalmenu">
-            <button pButton pRipple type="button" icon="fa fa-inbox" class="p-button-rounded p-button-primary p-mx-2" (click)="criarProduto()"></button>
+            <button pButton pRipple type="button" icon="fa fa-inbox" class="p-button-rounded p-button-primary p-mx-2" (click)="testar()"></button>
             <p-button styleClass="p-button-secondary p-button-rounded p-button-outlined" badgeClass="p-badge-warning" label="Carrinho" icon="pi pi-shopping-cart" badge="{{carrinho}}"></p-button>
-            <button pButton type="button" class="p-button-primary p-mx-2 p-button-rounded" label="Entrar" (click)="irParaLogin()" *ngIf="!logado"></button>
-            <p-splitButton label="Perfil" icon="fa fa-user" (onClick)="goToPerfil()" [model]="items_perfil" class="p-mx-2" styleClass="p-button-secondary" *ngIf="logado"></p-splitButton>
+            <button pButton type="button" class="p-button-primary p-mx-2 p-button-rounded" label="Entrar" (click)="irParaLogin()" *ngIf="!authService.isLoggedIn"></button>
+            <p-splitButton label="Perfil" icon="fa fa-user" (onClick)="goToPerfil()" [model]="items_perfil" class="p-mx-2" styleClass="p-button-secondary" *ngIf="authService.isLoggedIn"></p-splitButton>
         </div>
         <div class="verticalmenu">
-            <p-splitButton icon="fa fa-user" (onClick)="goToPerfil()" [model]="items_perfil" styleClass="p-button-secondary" *ngIf="logado"></p-splitButton>
+            <p-splitButton icon="fa fa-user" (onClick)="goToPerfil()" [model]="items_perfil" styleClass="p-button-secondary" *ngIf="authService.isLoggedIn"></p-splitButton>
             <p-button styleClass="p-button-secondary p-button-rounded p-button-outlined" class="p-mx-2" icon="pi pi-shopping-cart"></p-button>
             <button pButton pRipple type="button" icon="fa fa-inbox" class="p-button-rounded p-button-primary"></button>
-            <button pButton type="button" class="p-button-primary p-mx-2 p-button-rounded" label="Entrar" (click)="irParaLogin()" *ngIf="!logado"></button>
+            <button pButton type="button" class="p-button-primary p-mx-2 p-button-rounded" label="Entrar" (click)="irParaLogin()" *ngIf="!authService.isLoggedIn"></button>
         </div>
     </ng-template>
 </p-menubar>

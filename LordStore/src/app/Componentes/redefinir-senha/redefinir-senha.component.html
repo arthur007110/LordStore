@@ -1,0 +1,23 @@
+<p-card [style]="{'width': '25rem', 'margin-bottom': '2em', 'margin': '0 auto'}">
+    <ng-template pTemplate="header">
+        <img alt="Card" src="https://firebasestorage.googleapis.com/v0/b/testes-firebase-fd3fd.appspot.com/o/LordStoreLogo.png?alt=media&token=5bb55db8-68b9-4c14-b7e1-2f0fad66143b">
+    </ng-template>
+    <h2>
+        <b>
+            Redefinir Senha
+        </b>
+    </h2>
+    <div class="p-grid">
+        <div>
+            <b>
+                <p>Insira o email que deseja redefinir a senha:</p>
+            </b>
+            <input type="text" pInputText [style]="{'width': '100%'}" [(ngModel)]="email"/>
+            <button [style]="{'width': '100%'}" pButton pRipple type="button" label="Redefinir {{email}}" class="p-button-outlined" (click)="authService.ForgotPassword(email)"></button>
+            <b style="text-align: center;">
+                <p>Após enviar o email, verifique em sua caixa de entrada ou spam para redefinir.</p>
+            </b>
+            <button [style]="{'width': '100%'}" pButton pRipple type="button" label="Voltar Para Loja" class="p-button-outlined p-button-secondary" (click)="irParaHome()"></button>
+        </div>
+    </div>
+</p-card>
