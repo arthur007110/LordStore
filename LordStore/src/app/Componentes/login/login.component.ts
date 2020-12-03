@@ -21,5 +21,9 @@ export class LoginComponent implements OnInit {
   irParaCadastro(){
     this.router.navigate(['cadastro']);
   }
+  login(){
+    console.log(this.email, this.senha);
+    this.authService.SignIn(this.email, this.senha);
+  }
 
 }

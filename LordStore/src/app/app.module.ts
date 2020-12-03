@@ -29,6 +29,9 @@ import {PanelModule} from 'primeng/panel';
 import {DropdownModule} from 'primeng/dropdown';
 import {DialogModule} from 'primeng/dialog';
 import {RippleModule} from 'primeng/ripple';
+import {RatingModule} from 'primeng/rating';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
 
 //Componentes
 import { LoginComponent } from './Componentes/login/login.component';
@@ -39,7 +42,9 @@ import { RodapeComponent } from './Componentes/rodape/rodape.component';
 import { PedidosComponent } from './Componentes/pedidos/pedidos.component';
 import { EnderecosComponent } from './Componentes/enderecos/enderecos.component';
 import { ValidarEmailComponent } from './Componentes/validar-email/validar-email.component';
-import { RedefinirSenhaComponent } from './Componentes/redefinir-senha/redefinir-senha.component'
+import { RedefinirSenhaComponent } from './Componentes/redefinir-senha/redefinir-senha.component';
+import { PerfilComponent } from './Componentes/perfil/perfil.component';
+import { CarrinhoComponent } from './Componentes/carrinho/carrinho.component'
 
 // Rotas das Páginas
 const routes: Routes = [
@@ -47,6 +52,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },//Tela de Login
   { path: 'pedidos', component: PedidosComponent },//Tela de Login
   { path: 'enderecos', component: EnderecosComponent },//Tela de Login
+  { path: 'carrinho', component: CarrinhoComponent },//Tela de Listagem do Carinho
   { path: 'validar-email', component: ValidarEmailComponent },//Tela de Validação de Email
   { path: 'redefinir-senha', component: RedefinirSenhaComponent },//Tela de Redefinição de Senha
   { path: '', component: HomeComponent },//Tela de Login
@@ -64,7 +70,9 @@ const routes: Routes = [
     PedidosComponent,
     EnderecosComponent,
     ValidarEmailComponent,
-    RedefinirSenhaComponent
+    RedefinirSenhaComponent,
+    PerfilComponent,
+    CarrinhoComponent
   ],
   imports: [
     BrowserModule,
@@ -83,6 +91,9 @@ const routes: Routes = [
     DropdownModule,
     DialogModule,
     RippleModule,
+    RatingModule,
+    MessagesModule,
+    MessageModule,
 
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),

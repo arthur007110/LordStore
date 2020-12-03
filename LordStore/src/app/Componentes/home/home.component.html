@@ -1,51 +1,55 @@
-<app-menu></app-menu>
-
+<app-menu (filtroEvent) = filtrar($event)></app-menu>
 <div class="card">
-    <p-dataView #dv [value]="produtos" [paginator]="true" [rows]="9" filterBy="name"
-        [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
+    <p-dataView #dv [value]="produtos" [paginator]="true" [rows]="9" filterBy="nome,categoria.nome,tipo_produto.nome" 
+        [sortField]="sortField" [sortOrder]="sortOrder" layout="grid" emptyMessage = "Não Foram Encontrados Produtos">
         <ng-template pTemplate="header">
             <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
-                <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Ordenar Por Preço" (onChange)="onSortChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
-                <!--<span class="p-input-icon-left p-mb-2 p-mb-md-0">
+                <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Filtrar Por Preço" (onChange)="onSortChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
+                <span class="p-input-icon-left p-mb-2 p-mb-md-0">
                     <i class="pi pi-search"></i>
-                    <input type="search" pInputText placeholder="Search by Name" (input)="dv.filter($event.target.value)">
-                </span>-->
+                    <input id="filter" type="search" pInputText placeholder="Buscar Por Nome" [(ngModel)]="texto_filtro" (input)="dv.filter(texto_filtro)">
+                    <!--<input type="search" pInputText placeholder="Buscar Por Nome" (input)="dv.filter($event.target.value)">-->
+                </span>
                 <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
             </div>
         </ng-template>
-        <ng-template let-produto pTemplate="listItem">
+        <ng-template let-product pTemplate="listItem">
             <div class="p-col-12">
-                <div class="produto-list-item">
-                    <img [src]="'assets/showcase/images/demo/produto/' + produto.imagem" [alt]="produto.nome"/>
-                    <div class="produto-list-detail">
-                        <div class="produto-name">{{produto.nome}}</div>
-                        <i class="pi pi-tag produto-category-icon"></i><span class="produto-category">{{produto.categoria}}</span>
+                <div class="product-list-item">
+                    <img [src]="product.imagem" [alt]="product.name"/>
+                    <div class="product-list-detail">
+                        <div class="product-name">{{product.nome}}</div>
+                        <div class="product-description">{{product.tipo_produto.nome}}</div>
+                        <i class="pi pi-tag product-category-icon"></i><span class="product-category">{{product.categoria.nome}}</span>
                     </div>
-                    <div class="produto-list-action">
-                        <span class="produto-price">${{produto.preco}}</span>
-                        <p-button icon="pi pi-shopping-cart" label="Add to Cart" [disabled]="produto.inventoryStatus === 'FORA DE ESTOQUE'"></p-button>
-                        <span [class]="'produto-badge status-' + produto.inventoryStatus.toLowerCase()">{{produto.inventoryStatus}}</span>
+                    <div class="product-list-action">
+                        <!--<span class="product-price">R$ {{product.preco}}</span>-->
+                        <div class="price">R$ {{product.preco}}</div>
+                        <p-button icon="pi pi-shopping-cart" label="Add to Cart" [disabled]="produtoService.getStatusProduto(product) === 'SEMESTOQUE'"></p-button>
+                        <!--<span [class]="'product-badge status-' + produtoService.getStatusProduto(product).toLowerCase()">{{produtoService.getStatusProduto(product)}}</span>-->
                     </div>
                 </div>
             </div>
         </ng-template>
-        <ng-template let-produto pTemplate="gridItem">
+        <ng-template let-product pTemplate="gridItem">
             <div class="p-col-12 p-md-4">
-                <div class="produto-grid-item card">
-                    <div class="produto-grid-item-top">
+                <div class="product-grid-item card">
+                    <div class="product-grid-item-top">
                         <div>
-                            <i class="pi pi-tag produto-category-icon"></i>
-                            <span class="produto-category">{{produto.categoria}}</span>
+                            <i class="pi pi-tag product-category-icon"></i>
+                            <span class="product-category">{{product.categoria.nome}}</span>
                         </div>
-                        <span [class]="'produto-badge status-' + produto.inventoryStatus.toLowerCase()">{{produto.inventoryStatus}}</span>
+                        <!--<span [class]="'product-badge status-' + produtoService.getStatusProduto(product).toLowerCase()">{{produtoService.getStatusProduto(product)}}</span>-->
+                        <div class="status-{{produtoService.getStatusProduto(product).toLowerCase()}}">{{produtoService.getStatusProduto(product)}}</div>
                     </div>
-                    <div class="produto-grid-item-content">
-                        <img [src]="'assets/showcase/images/demo/produto/' + produto.imagem" [alt]="produto.nome"/>
-                        <div class="produto-name">{{produto.nome}}</div>
-                        </div>
-                    <div class="produto-grid-item-bottom">
-                        <span class="produto-price">${{produto.preco}}</span>
-                        <p-button icon="pi pi-shopping-cart" [disabled]="produto.inventoryStatus === 'FORA DE ESTOQUE'"></p-button>
+                    <div class="product-grid-item-content">
+                        <img [src]="product.imagem" [alt]="product.name"/>
+                        <div class="product-name">{{product.nome}}</div>
+                        <div class="product-description">{{product.tipo_produto.nome}}</div>
+                    </div>
+                    <div class="product-grid-item-bottom">
+                        <span class="price">R$ {{product.preco}}</span>
+                        <p-button icon="pi pi-shopping-cart" [disabled]="produtoService.getStatusProduto(product).toLowerCase() === 'SEMESTOQUE'" (click)="clienteService.adicionarProdutoAoCarrinho(product)"></p-button>
                     </div>
                 </div>
             </div>

@@ -111,8 +111,6 @@ export class AuthService {
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetClienteData(cliente: any, nome: string) {
     const clienteRef: AngularFirestoreDocument<any> = this.afs.doc(`Clientes/${cliente.uid}`);
-    const carrinhoRef: AngularFirestoreDocument<any> = this.afs.doc(`Carrinho/${cliente.uid}`);
-    console.log(cliente);
 
     const clienteData:Cliente = {
       id: cliente.uid,
@@ -120,7 +118,6 @@ export class AuthService {
       nome: cliente.displayName,
       foto_url: cliente.photoURL,
       email_verificado: cliente.emailVerified,
-      senha: '',
       pedidos: [],
       carrinho: {id: cliente.uid, produtos: []},
       enderecos: []
@@ -129,11 +126,6 @@ export class AuthService {
     if(nome != ''){
       clienteData.nome = nome;
     }
-    
-    console.log(clienteData);
-    carrinhoRef.set(clienteData.carrinho, {
-      merge: true
-    });
     return clienteRef.set(clienteData, {
       merge: true
     });

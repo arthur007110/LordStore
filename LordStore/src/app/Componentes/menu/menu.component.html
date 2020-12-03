@@ -6,15 +6,16 @@
     </ng-template>
     <ng-template pTemplate="end">
         <div class="horizontalmenu">
-            <button pButton pRipple type="button" icon="fa fa-inbox" class="p-button-rounded p-button-primary p-mx-2" (click)="testar()"></button>
-            <p-button styleClass="p-button-secondary p-button-rounded p-button-outlined" badgeClass="p-badge-warning" label="Carrinho" icon="pi pi-shopping-cart" badge="{{carrinho}}"></p-button>
+            <button pButton pRipple type="button" icon="fa fa-inbox" class="p-button-rounded p-button-primary p-mx-2" (click)="exibirRegistros()"></button>
+            <p-button styleClass="p-button-secondary p-button-rounded p-button-outlined" badgeClass="p-badge-warning" label="Carrinho" icon="pi pi-shopping-cart" badge="{{carrinho}}" (click)="irParaCarrinho()"></p-button>
             <button pButton type="button" class="p-button-primary p-mx-2 p-button-rounded" label="Entrar" (click)="irParaLogin()" *ngIf="!authService.isLoggedIn"></button>
             <p-splitButton label="Perfil" icon="fa fa-user" (onClick)="goToPerfil()" [model]="items_perfil" class="p-mx-2" styleClass="p-button-secondary" *ngIf="authService.isLoggedIn"></p-splitButton>
+            
         </div>
         <div class="verticalmenu">
             <p-splitButton icon="fa fa-user" (onClick)="goToPerfil()" [model]="items_perfil" styleClass="p-button-secondary" *ngIf="authService.isLoggedIn"></p-splitButton>
             <p-button styleClass="p-button-secondary p-button-rounded p-button-outlined" class="p-mx-2" icon="pi pi-shopping-cart"></p-button>
-            <button pButton pRipple type="button" icon="fa fa-inbox" class="p-button-rounded p-button-primary"></button>
+            <button pButton pRipple type="button" icon="fa fa-inbox" class="p-button-rounded p-button-primary" (click)="criarProduto()"></button>
             <button pButton type="button" class="p-button-primary p-mx-2 p-button-rounded" label="Entrar" (click)="irParaLogin()" *ngIf="!authService.isLoggedIn"></button>
         </div>
     </ng-template>

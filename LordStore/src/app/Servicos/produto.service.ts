@@ -16,7 +16,7 @@ export class ProdutoService {
 
     ProdutosObservable.subscribe(valores =>{
       this.construirProdutos(valores);
-    })
+    });
   }
 
   construirProdutos(valores: any){
@@ -36,7 +36,23 @@ export class ProdutoService {
     });
   }
 
-  criar_novo_produto(produto: Produto){
+  criar_novo_produto(produto: any){
     return this.firestore.collection('Produtos').add(produto);
+  }
+
+  getProdutos(){
+    let ProdutosObservable = this.firestore.collection('Produtos').valueChanges();
+
+    return ProdutosObservable;
+  }
+
+  getStatusProduto(produto: any){
+    if(produto.quantidade_estoque > 5){
+      return "ALTOESTOQUE";
+    }else if(produto.quantidade_estoque == 0){
+      return "SEMESTOQUE";
+    }else{
+      return "BAIXOESTOQUE";
+    }
   }
 }

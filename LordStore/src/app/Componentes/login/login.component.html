@@ -1,6 +1,6 @@
 <p-card [style]="{'width': '25rem', 'margin-bottom': '2em', 'margin': '0 auto'}">
     <ng-template pTemplate="header">
-        <img alt="Card" src="https://firebasestorage.googleapis.com/v0/b/testes-firebase-fd3fd.appspot.com/o/LordStoreLogo.png?alt=media&token=5bb55db8-68b9-4c14-b7e1-2f0fad66143b">
+        <img alt="Card" src="https://firebasestorage.googleapis.com/v0/b/lord-store.appspot.com/o/LordStoreLogoWithoutBackground.png?alt=media&token=39c91c5d-245d-4abe-9e6a-33e0967962ea">
     </ng-template>
     <h2>
         <b>
@@ -16,7 +16,7 @@
         </div>
         <div class="p-col-12">
             <span class="p-float-label">
-                <input type="password" pPassword [(ngModel)]="senha" [style]="{'width': '100%'}" [feedback]="false"/>
+                <input type="password" pPassword [(ngModel)]="senha" [style]="{'width': '100%'}" [feedback]="false" (keyup.enter)="authService.SignIn(email, senha)"/>
                 <label for="senha-input">Senha</label>
             </span>
         </div>
@@ -25,7 +25,7 @@
         </div>
         <div class="p-col-6">
             <p-button icon="pi pi-google" styleClass="p-button-outlined" label="Google" [style]="{'width': '100%'}" (click)="authService.GoogleAuth()"></p-button>
-          </div>
+        </div>
         <div class="p-col-6 right">
             <button pButton type="button" class="p-button-secondary" label="Cadastrar" [style]="{'width': '100%'}" (click)="irParaCadastro()"></button>
         </div>
