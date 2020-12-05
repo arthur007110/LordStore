@@ -3,14 +3,43 @@
     <p-dataView #dv [value]="produtos" [paginator]="true" [rows]="9" filterBy="nome,categoria.nome,tipo_produto.nome" 
         [sortField]="sortField" [sortOrder]="sortOrder" layout="grid" emptyMessage = "Não Foram Encontrados Produtos">
         <ng-template pTemplate="header">
-            <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
-                <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Filtrar Por Preço" (onChange)="onSortChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
-                <span class="p-input-icon-left p-mb-2 p-mb-md-0">
-                    <i class="pi pi-search"></i>
-                    <input id="filter" type="search" pInputText placeholder="Buscar Por Nome" [(ngModel)]="texto_filtro" (input)="dv.filter(texto_filtro)">
-                    <!--<input type="search" pInputText placeholder="Buscar Por Nome" (input)="dv.filter($event.target.value)">-->
-                </span>
-                <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+            <div class="horizontalmenu">
+                <div class="p-grid">
+                    <div class="p-col-4">
+                        <p-dropdown [options]="sortOptions" [style]="{'width': '100%'}" [(ngModel)]="sortKey" placeholder="Filtrar Por Preço" (onChange)="onSortChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
+                    </div>
+                    <div class="p-col-7">
+                        <span class="p-input-icon-left" [style]="{'width': '100%'}">
+                            <i class="pi pi-search"></i>
+                            <input id="filter" type="search" pInputText [style]="{'width': '100%'}" placeholder="Buscar Por Nome" [(ngModel)]="texto_filtro" (input)="dv.filter(texto_filtro)">
+                            <!--<input type="search" pInputText placeholder="Buscar Por Nome" (input)="dv.filter($event.target.value)">-->
+                        </span>
+                    </div>
+                    <div class="p-col">
+                        <div style="float: right;">
+                            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="verticalmenu">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <p-dropdown [options]="sortOptions" [style]="{'width': '100%'}" [(ngModel)]="sortKey" placeholder="Filtrar Por Preço" (onChange)="onSortChange($event)" styleClass="p-mb-2 p-mb-md-0"></p-dropdown>
+                    </div>
+                    <div class="p-col-12">
+                        <span class="p-input-icon-left" [style]="{'width': '100%'}">
+                            <i class="pi pi-search"></i>
+                            <input id="filter" type="search" pInputText [style]="{'width': '100%'}" placeholder="Buscar Por Nome" [(ngModel)]="texto_filtro" (input)="dv.filter(texto_filtro)">
+                            <!--<input type="search" pInputText placeholder="Buscar Por Nome" (input)="dv.filter($event.target.value)">-->
+                        </span>
+                    </div>
+                    <div class="p-col">
+                        <div style="float: right;">
+                            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                        </div>
+                    </div>
+                </div>
             </div>
         </ng-template>
         <ng-template let-product pTemplate="listItem">

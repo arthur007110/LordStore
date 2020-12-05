@@ -108,6 +108,17 @@
     border-width: 3px;
 
 }
+@media screen and (min-width : 1200px) {
+    .verticalmenu {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width : 1200px) {
+    .horizontalmenu {
+        display: none !important;
+    }    
+}
 @media screen and (max-width: 2000px) {
     :host ::ng-deep .product-list-item {
         flex-direction: column;

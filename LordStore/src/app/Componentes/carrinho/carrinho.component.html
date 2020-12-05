@@ -1,1 +1,105 @@
 <app-menu></app-menu>
+
+<p-table #dt [value]="produtos" [(selection)]="selectedProdutos" dataKey="id" styleClass="p-datatable-customers" [rowHover]="true"
+    [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,15]" [loading]="loading"
+    [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [filterDelay]="0" [globalFilterFields]="['nome']">
+    <ng-template pTemplate="caption">
+        <div class="table-header">
+            Carrinho
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" [(ngModel)]="inputText" (input)="dt.filterGlobal(inputText, 'contains')" placeholder="Global Search" />
+            </span>
+            <button pButton type="button" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="nome">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                    Nome
+                    <p-sortIcon field="nome"></p-sortIcon>
+                    <p-columnFilter type="text" field="nome" display="menu" class="p-ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th>
+                <div class="p-d-flex p-jc-between p-ai-center">
+                    Imagem 
+                    <ng-template pTemplate="header">
+                        <div class="p-px-3 p-pt-3 p-pb-0">
+                            <span class="p-text-bold">Agent Picker</span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                        <ng-template let-option pTemplate="item">
+                            <div class="p-multiselect-representative-option">
+                                <img [alt]="option.nome" src="{{option.imagem}}" width="64" style="vertical-align: middle" />
+                                <span class="p-ml-1">{{option.nome}}</span>
+                            </div>
+                        </ng-template>
+                    </ng-template>
+                </div>
+            </th>
+            <th pSortableColumn="preco">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                    Preço
+                    <p-sortIcon field="preco"></p-sortIcon>
+                    <p-columnFilter type="numeric" field="balance" display="menu" currency="BRL" class="p-ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th pSortableColumn="quatidade">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                    Quantidade
+                    <p-sortIcon field="quantidade"></p-sortIcon>
+                    <p-columnFilter type="numeric" field="balance" display="menu" class="p-ml-auto"></p-columnFilter>
+                </div>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-produto>
+        <tr class="p-selectable-row">
+            <td>
+
+                <!--<p-tableCheckbox [value]="produto"></p-tableCheckbox>-->
+                <p-checkbox value="{{produto.codigo}}" [(ngModel)]="selectedProdutos"></p-checkbox>
+            </td>
+            <td>
+                <span class="p-column-title">nome</span>
+                {{produto.nome}}
+            </td>
+            <td>
+                <span class="p-column-title">imagem</span>
+                <img [alt]="produto.nome" src="{{produto.imagem}}" width="64" style="vertical-align: middle" />
+            </td>
+            <td>
+                {{produto.preco | currency:'BRL':'symbol'}}
+            </td>
+            <td>
+                <div class="p-grid">
+                    <div class="p-col-2">
+                        <button [style]="{'width': '100%', 'height': '100%'}" pButton type="button" class="p-button-secondary p-button-sm" icon="fas fa-minus" (click)="teste()"></button>
+                    </div>
+                    <div class="p-col-8">
+                        <p-card [style]="{'width': '100%', 'height': '100%', 'text-align': 'center'}" class="p-shadow-24">
+                            <b>
+                                {{produto.quantidade_comprar}}
+                            </b>
+                        </p-card>
+                    </div>
+                    <div class="p-col-2">
+                        <button [style]="{'width': '100%', 'height': '100%'}" pButton type="button" class="p-button-secondary p-button-sm" icon="fas fa-plus"></button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="8">No customers found.</td>
+        </tr>
+    </ng-template>
+</p-table>

@@ -32,6 +32,9 @@ import {RippleModule} from 'primeng/ripple';
 import {RatingModule} from 'primeng/rating';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
+import {TableModule} from 'primeng/table';
+import {CheckboxModule} from 'primeng/checkbox';
+
 
 //Componentes
 import { LoginComponent } from './Componentes/login/login.component';
@@ -94,6 +97,8 @@ const routes: Routes = [
     RatingModule,
     MessagesModule,
     MessageModule,
+    TableModule,
+    CheckboxModule,
 
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),
