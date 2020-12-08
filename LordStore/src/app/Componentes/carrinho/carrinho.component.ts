@@ -11,9 +11,9 @@ export class CarrinhoComponent implements OnInit {
 
   inputText: string;
 
-  produtos: [];
+  produtos: any[];
 
-  selectedProdutos: [];
+  selectedProdutos: any[];
 
   statuses: any[];
 
@@ -32,6 +32,14 @@ export class CarrinhoComponent implements OnInit {
   teste(){
     console.log(1, this.produtos);
     console.log(2, this.selectedProdutos);
+  }
+  mostrarProdutosSelecionados(){
+    this.selectedProdutos.forEach(produto =>{
+      alert(produto);
+    })
+  }
+  comprarSelecionados(){
+    
   }
 
 }

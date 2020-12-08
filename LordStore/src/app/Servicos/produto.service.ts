@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Produto } from '../Modelos/Produto';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,23 @@ export class ProdutoService {
     let ProdutosObservable = this.firestore.collection('Produtos').valueChanges();
 
     return ProdutosObservable;
+  }
+  teste(codigo: string){
+    this.firestore.collection('Produtos').get().subscribe(actions =>{
+      actions.docs.forEach((produto: any) =>{
+        if(produto.data().codigo == codigo){
+          this.rearrumarEstoque(produto.id, -1);
+        }
+      });
+    });
+  }
+
+  rearrumarEstoque(id: string, quantidade: number){
+    let produtoRef: AngularFirestoreDocument<any> = this.firestore.doc(`Produtos/${id}`);
+    produtoRef.update({
+      "quantidade_estoque": firebase.default.firestore.FieldValue.increment(quantidade)
+    });
+
   }
 
   getStatusProduto(produto: any){

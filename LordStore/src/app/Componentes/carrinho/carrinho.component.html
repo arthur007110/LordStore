@@ -2,7 +2,7 @@
 
 <p-table #dt [value]="produtos" [(selection)]="selectedProdutos" dataKey="id" styleClass="p-datatable-customers" [rowHover]="true"
     [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,15]" [loading]="loading"
-    [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} Produtos"
     [filterDelay]="0" [globalFilterFields]="['nome']">
     <ng-template pTemplate="caption">
         <div class="table-header">
@@ -11,7 +11,7 @@
                 <i class="pi pi-search"></i>
                 <input pInputText type="text" [(ngModel)]="inputText" (input)="dt.filterGlobal(inputText, 'contains')" placeholder="Global Search" />
             </span>
-            <button pButton type="button" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
+            <button pButton type="button" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave" (click)="mostrarProdutosSelecionados()"></button>
         </div>
     </ng-template>
     <ng-template pTemplate="header">

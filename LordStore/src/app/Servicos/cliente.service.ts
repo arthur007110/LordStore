@@ -3,6 +3,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { Produto } from '../Modelos/Produto';
 import { AuthService } from './auth.service';
 import * as firebase from 'firebase/app';
+import { ProdutoService } from './produto.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class ClienteService {
     carrinho: { produtos: [{}]}
   }
   constructor(private authService: AuthService,
-              public afs: AngularFirestore) { 
+              public afs: AngularFirestore,
+              private produtoService: ProdutoService) { 
 
     this.cliente = authService.clienteData;
 
@@ -24,6 +26,11 @@ export class ClienteService {
     this.verificarUsuario();
     let clienteRef: AngularFirestoreDocument<any> = this.afs.doc(`Clientes/${this.cliente.uid}`);
     let productExists = false;
+
+    if(produto.quantidade_estoque == 0){
+      return 'semestoque';
+    }
+
     clienteRef.get().subscribe(valor =>{
       valor.data().carrinho.produtos.forEach((Dproduto: any) => {
         if(Dproduto.codigo == produto.codigo){
@@ -35,26 +42,27 @@ export class ClienteService {
             clienteRef.update({
               "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(produto)
             });
+            this.produtoService.teste(produto.codigo)
           })
         }
       });
       if(!productExists){
         clienteRef.update({
           "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(produto)
-        });
+        })
       }
     });
-    
-    
+    return 'adicionado';
   }
 
   listarProdutos(produto: any){
     this.verificarUsuario();
     let clienteRef: AngularFirestoreDocument<any> = this.afs.doc(`Clientes/${this.cliente.uid}`);
-    /*valor*/
+    
   }
 
-  get_quantidade_de_produtos_carrinho(){
+
+  get_cliente_logado(){
     this.verificarUsuario();
     let clienteRef: AngularFirestoreDocument<any> = this.afs.doc(`Clientes/${this.cliente.uid}`);
     return clienteRef.valueChanges();

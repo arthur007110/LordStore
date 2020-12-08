@@ -81,7 +81,7 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.clienteService.get_quantidade_de_produtos_carrinho().subscribe(cliente =>{
+    this.clienteService.get_cliente_logado().subscribe(cliente =>{
       if(cliente){
         this.carrinho = cliente.carrinho.produtos.length;
       }

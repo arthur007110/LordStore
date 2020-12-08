@@ -34,6 +34,7 @@ import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import {TableModule} from 'primeng/table';
 import {CheckboxModule} from 'primeng/checkbox';
+import {ToastModule} from 'primeng/toast';
 
 
 //Componentes
@@ -48,6 +49,7 @@ import { ValidarEmailComponent } from './Componentes/validar-email/validar-email
 import { RedefinirSenhaComponent } from './Componentes/redefinir-senha/redefinir-senha.component';
 import { PerfilComponent } from './Componentes/perfil/perfil.component';
 import { CarrinhoComponent } from './Componentes/carrinho/carrinho.component'
+import { MessageService } from 'primeng/api';
 
 // Rotas das Páginas
 const routes: Routes = [
@@ -99,6 +101,7 @@ const routes: Routes = [
     MessageModule,
     TableModule,
     CheckboxModule,
+    ToastModule,
 
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),
@@ -107,7 +110,7 @@ const routes: Routes = [
   exports: [
     RouterModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

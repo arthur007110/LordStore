@@ -1,4 +1,5 @@
 <app-menu (filtroEvent) = filtrar($event)></app-menu>
+<p-toast></p-toast>
 <div class="card">
     <p-dataView #dv [value]="produtos" [paginator]="true" [rows]="9" filterBy="nome,categoria.nome,tipo_produto.nome" 
         [sortField]="sortField" [sortOrder]="sortOrder" layout="grid" emptyMessage = "Não Foram Encontrados Produtos">
@@ -78,7 +79,7 @@
                     </div>
                     <div class="product-grid-item-bottom">
                         <span class="price">R$ {{product.preco}}</span>
-                        <p-button icon="pi pi-shopping-cart" [disabled]="produtoService.getStatusProduto(product).toLowerCase() === 'SEMESTOQUE'" (click)="clienteService.adicionarProdutoAoCarrinho(product)"></p-button>
+                        <p-button icon="pi pi-shopping-cart" [disabled]="produtoService.getStatusProduto(product).toLowerCase() === 'SEMESTOQUE'" (click)="comprar(product)"></p-button>
                     </div>
                 </div>
             </div>

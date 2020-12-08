@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { PrimeNGConfig, SelectItem } from 'primeng/api';
+import { MessageService, PrimeNGConfig, SelectItem } from 'primeng/api';
 import { Produto } from 'src/app/Modelos/Produto';
 import { ProdutoService } from 'src/app/Servicos/produto.service';
 import { filter } from 'rxjs/operators';
@@ -14,7 +14,8 @@ export class HomeComponent implements OnInit {
 
   constructor(private primengConfig: PrimeNGConfig,
               public produtoService: ProdutoService,
-              public clienteService: ClienteService) { }
+              public clienteService: ClienteService,
+              private messageService: MessageService) { }
 
   produtos: any[];
 
@@ -42,6 +43,16 @@ export class HomeComponent implements OnInit {
     //this.texto_filtro = filtro;
     (<HTMLInputElement>document.getElementById("filter")).value = filtro;
     (<HTMLInputElement>document.getElementById("filter")).dispatchEvent(new Event('input'));
+  }
+
+  comprar(produto: any){
+    status = this.clienteService.adicionarProdutoAoCarrinho(produto);
+    console.log(status);
+    if(status == 'adicionado'){
+      this.messageService.add({severity:'success', summary: 'Tudo Certo!', detail: 'O produto foi adicionado ao carrinho', icon: 'pi pi-shopping-cart'});
+    }else if(status == 'semestoque'){
+      this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'O produto encontra-se fora de estoque', icon: 'pi pi-shopping-cart'});
+    }
   }
 
   onSortChange(evento: any) {
