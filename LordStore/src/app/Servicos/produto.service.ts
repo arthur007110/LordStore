@@ -46,11 +46,14 @@ export class ProdutoService {
 
     return ProdutosObservable;
   }
-  teste(codigo: string){
+
+  adicionarAoCarrinho(codigo: string){
     this.firestore.collection('Produtos').get().subscribe(actions =>{
       actions.docs.forEach((produto: any) =>{
         if(produto.data().codigo == codigo){
-          this.rearrumarEstoque(produto.id, -1);
+          if(produto.data().quantidade_estoque > 0){
+            this.rearrumarEstoque(produto.id, -1);
+          }
         }
       });
     });

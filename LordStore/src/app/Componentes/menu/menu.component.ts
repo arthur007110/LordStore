@@ -29,9 +29,20 @@ export class MenuComponent implements OnInit {
 
   @Output() filtroEvent = new EventEmitter<string>();
 
+  ngDoCheck() {
+    if(this.clienteService.cliente.uid == "temp" && this.clienteService.cliente.carrinho.produtos.length !=0){
+      this.carrinho = this.clienteService.cliente.carrinho.produtos.length-1;
+    }
+  }
+
+  mostrarCarrinho(){
+    console.log(this.clienteService.cliente)
+  }
+
   irParaLogin(){
     this.router.navigate(['login']);
   }
+  
   irParaCarrinho(){
     this.router.navigate(['carrinho']);
   }

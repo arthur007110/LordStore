@@ -1,8 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MessageService, PrimeNGConfig, SelectItem } from 'primeng/api';
-import { Produto } from 'src/app/Modelos/Produto';
 import { ProdutoService } from 'src/app/Servicos/produto.service';
-import { filter } from 'rxjs/operators';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 
 @Component({
@@ -52,6 +50,8 @@ export class HomeComponent implements OnInit {
       this.messageService.add({severity:'success', summary: 'Tudo Certo!', detail: 'O produto foi adicionado ao carrinho', icon: 'pi pi-shopping-cart'});
     }else if(status == 'semestoque'){
       this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'O produto encontra-se fora de estoque', icon: 'pi pi-shopping-cart'});
+    }else if(status == 'clientetemporario'){
+      this.messageService.add({severity:'success', summary: 'Cliente Temporario Criado!', detail: 'Você não está logado, recomendamos criar uma conta caso não possua, seu produto está no carrinho', icon: 'pi pi-shopping-cart'});
     }
   }
 

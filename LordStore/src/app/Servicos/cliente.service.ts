@@ -11,7 +11,7 @@ import { ProdutoService } from './produto.service';
 export class ClienteService {
 
   cliente = {
-    uid: "",
+    uid: "temp",
     carrinho: { produtos: [{}]}
   }
   constructor(private authService: AuthService,
@@ -19,6 +19,7 @@ export class ClienteService {
               private produtoService: ProdutoService) { 
 
     this.cliente = authService.clienteData;
+    this.verificarUsuario();
 
   }
 
@@ -31,34 +32,50 @@ export class ClienteService {
       return 'semestoque';
     }
 
+    if(this.cliente.uid == "temp"){
+      this.adicionarProdutoAoCarrinhoTemp(produto);
+      return 'clientetemporario';
+    }
+
+    let temEstoque = true;
     clienteRef.get().subscribe(valor =>{
       valor.data().carrinho.produtos.forEach((Dproduto: any) => {
         if(Dproduto.codigo == produto.codigo){
-          produto.quantidade_comprar = Dproduto.quantidade_comprar+1;
-          productExists = true;
-          clienteRef.update({
-            "carrinho.produtos": firebase.default.firestore.FieldValue.arrayRemove(Dproduto)
-          }).then(() =>{
+          if(produto.quantidade_estoque <= 0){
+            temEstoque = false;
+          }else{
+            produto.quantidade_comprar = Dproduto.quantidade_comprar+1;
+            productExists = true;
             clienteRef.update({
-              "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(produto)
+              "carrinho.produtos": firebase.default.firestore.FieldValue.arrayRemove(Dproduto)
+            }).then(() =>{
+              clienteRef.update({
+                "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(produto)
+              });
+              this.produtoService.adicionarAoCarrinho(produto.codigo)
             });
-            this.produtoService.teste(produto.codigo)
-          })
+          }
         }
       });
-      if(!productExists){
+      if(!productExists && temEstoque){
         clienteRef.update({
           "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(produto)
-        })
+        }).then(() =>{
+          this.produtoService.adicionarAoCarrinho(produto.codigo)
+        });
       }
     });
     return 'adicionado';
   }
 
-  listarProdutos(produto: any){
-    this.verificarUsuario();
+  adicionarProdutoAoCarrinhoTemp(produto: Produto){
+    this.cliente.carrinho.produtos.push(produto);
+    localStorage.setItem('cliente' ,JSON.stringify(this.cliente));
+  }
+
+  getClienteRef(){
     let clienteRef: AngularFirestoreDocument<any> = this.afs.doc(`Clientes/${this.cliente.uid}`);
-    
+    return clienteRef;
   }
 
 
@@ -68,16 +85,21 @@ export class ClienteService {
     return clienteRef.valueChanges();
   }
 
+  criar_usuario_temporario(){
+    this.cliente = {
+      uid: "temp",
+      carrinho: { produtos: [{}]}
+    }
+    console.log("usuario temporario criado!")
+  }
+
   verificarUsuario(){
     if(this.cliente == undefined && this.authService.clienteData != undefined){
       this.cliente = this.authService.clienteData;
-    }else if(JSON.parse(localStorage.getItem('cliente')!) != undefined){
+    }else if(JSON.parse(localStorage.getItem('cliente')!) != undefined && Object.keys(JSON.parse(localStorage.getItem('cliente')!)).length !== 0 && JSON.parse(localStorage.getItem('cliente')!) != null){
       this.cliente = JSON.parse(localStorage.getItem('cliente')!);
     }else{
-      this.cliente = {
-        uid: "",
-        carrinho: { produtos: [{}]}
-      }
+      this.criar_usuario_temporario();
     }
   }
 
