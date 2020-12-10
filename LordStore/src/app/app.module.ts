@@ -36,7 +36,6 @@ import {TableModule} from 'primeng/table';
 import {CheckboxModule} from 'primeng/checkbox';
 import {ToastModule} from 'primeng/toast';
 
-
 //Componentes
 import { LoginComponent } from './Componentes/login/login.component';
 import { CadastroComponent } from './Componentes/cadastro/cadastro.component';

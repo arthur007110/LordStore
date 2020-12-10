@@ -2,12 +2,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { Observable } from 'rxjs';
 import { Categoria } from 'src/app/Modelos/Categoria';
 import { Produto } from 'src/app/Modelos/Produto';
 import { TipoProduto } from 'src/app/Modelos/TipoProduto';
 import { AuthService } from 'src/app/Servicos/auth.service';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { ProdutoService } from 'src/app/Servicos/produto.service';
+import { interval } from 'rxjs'
 
 @Component({
   selector: 'app-menu',
@@ -92,17 +94,34 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.clienteService.get_cliente_logado().subscribe(cliente =>{
+    /*this.clienteService.get_cliente_logado().subscribe(cliente =>{
       if(cliente){
         this.carrinho = cliente.carrinho.produtos.length;
       }
-    })
+    })*/
+    if(this.clienteService.getClienteUID() == "temp"){
+      this.clienteService.getQuantidadeProutosCarrinhoTemp().subscribe(valor =>{
+        this.carrinho = valor;
+      })
+    }else{
+      this.clienteService.getQuantidadeProutosCarrinho().subscribe(valor =>{
+        this.carrinho = valor;
+      });
+    }
+    
 
     this.items_menu = [
       {
         label:'Produtos',
         icon:'fa fa-box-open',
         items:[
+          {
+            label:'Tudo',
+            icon:'fa fa-align-justify',
+            command: () =>{
+              this.emitFiltro("");
+            }
+          },
           {
             label:'Roupas',
             icon:'fa fa-tshirt',

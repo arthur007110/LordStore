@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Produto } from '../Modelos/Produto';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -59,12 +60,39 @@ export class ProdutoService {
     });
   }
 
-  rearrumarEstoque(id: string, quantidade: number){
+  getUIDbyCodigo(codigo: string){
+    return new Observable<string>(observer =>{
+      this.firestore.collection('Produtos').get().subscribe(actions =>{
+        actions.docs.forEach((produto: any) =>{
+          if(produto.data().codigo == codigo){
+            observer.next(produto.id);
+          }
+        });
+      });
+    });
+  }
+
+  getProdutoRef(id: string){
     let produtoRef: AngularFirestoreDocument<any> = this.firestore.doc(`Produtos/${id}`);
-    produtoRef.update({
+
+    return produtoRef;
+  }
+
+  rearrumarEstoque(id: string, quantidade: number){
+    this.getProdutoRef(id).update({
       "quantidade_estoque": firebase.default.firestore.FieldValue.increment(quantidade)
     });
+  }
 
+  getProdutoEstoque(produto: Produto){
+    return new Observable(observer =>{
+      this.getUIDbyCodigo(produto.codigo).subscribe((id) =>{
+        this.getProdutoRef(id).get().subscribe(valor =>{
+          observer.next(valor.data().quantidade_estoque);
+          observer.complete();
+        });
+      });
+    });
   }
 
   getStatusProduto(produto: any){

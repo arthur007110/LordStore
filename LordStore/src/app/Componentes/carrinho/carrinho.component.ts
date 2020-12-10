@@ -56,4 +56,12 @@ export class CarrinhoComponent implements OnInit {
     
   }
 
+  aumentarQuantidade(produto: Produto){
+    this.clienteService.aumentarQuantidadeProduto(produto);
+  }
+
+  diminuirQuantidade(produto: Produto){
+    this.clienteService.diminuirQuantidadeProduto(produto);
+  }
+
 }

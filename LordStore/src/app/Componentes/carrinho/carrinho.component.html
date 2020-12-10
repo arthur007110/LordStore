@@ -81,7 +81,7 @@
             <td>
                 <div class="p-grid">
                     <div class="p-col-2">
-                        <button [style]="{'width': '100%', 'height': '100%'}" pButton type="button" class="p-button-secondary p-button-sm" icon="fas fa-minus" (click)="teste()"></button>
+                        <button [style]="{'width': '100%', 'height': '100%'}" pButton type="button" class="p-button-secondary p-button-sm" icon="fas fa-minus" (click)="diminuirQuantidade(produto)" [disabled]="produto.quantidade_comprar == 0"></button>
                     </div>
                     <div class="p-col-8">
                         <p-card [style]="{'width': '100%', 'height': '100%', 'text-align': 'center'}" class="p-shadow-24">
@@ -91,7 +91,7 @@
                         </p-card>
                     </div>
                     <div class="p-col-2">
-                        <button [style]="{'width': '100%', 'height': '100%'}" pButton type="button" class="p-button-secondary p-button-sm" icon="fas fa-plus"></button>
+                        <button [style]="{'width': '100%', 'height': '100%'}" pButton type="button" class="p-button-secondary p-button-sm" icon="fas fa-plus" (click)="aumentarQuantidade(produto)" [disabled]="produto.quantidade_comprar >= produto.quantidade_estoque"></button>
                     </div>
                 </div>
             </td>
