@@ -35,6 +35,8 @@ import {MessageModule} from 'primeng/message';
 import {TableModule} from 'primeng/table';
 import {CheckboxModule} from 'primeng/checkbox';
 import {ToastModule} from 'primeng/toast';
+import {ConfirmPopupModule} from 'primeng/confirmpopup';
+import {ConfirmationService} from 'primeng/api';
 
 //Componentes
 import { LoginComponent } from './Componentes/login/login.component';
@@ -101,6 +103,7 @@ const routes: Routes = [
     TableModule,
     CheckboxModule,
     ToastModule,
+    ConfirmPopupModule,
 
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),
@@ -109,7 +112,7 @@ const routes: Routes = [
   exports: [
     RouterModule
   ],
-  providers: [AuthService, MessageService],
+  providers: [AuthService, MessageService, ConfirmationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

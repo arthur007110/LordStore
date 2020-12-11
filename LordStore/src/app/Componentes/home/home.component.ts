@@ -46,13 +46,15 @@ export class HomeComponent implements OnInit {
   comprar(produto: any){
     this.clienteService.adicionarProdutoAoCarrinho(produto).subscribe(status =>{
       if(status == 'adicionado'){
-        this.messageService.add({severity:'success', summary: 'Tudo Certo!', detail: 'O produto foi adicionado ao carrinho', icon: 'pi pi-shopping-cart'});
+        this.messageService.add({severity:'success', summary: 'Tudo Certo!', detail: 'O produto foi adicionado ao carrinho', icon: 'pi pi-shopping-cart', life: 1000});
       }else if(status == 'semestoque'){
-        this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'O produto encontra-se fora de estoque'});
+        this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'O produto encontra-se fora de estoque', life: 1000});
       }else if(status == 'clientetemporario'){
-        this.messageService.add({severity:'warn', summary: 'Cliente Temporario Criado!', detail: 'Você não está logado, recomendamos criar uma conta caso não possua, seu produto está no carrinho', icon: 'pi pi-shopping-cart'});
+        this.messageService.add({severity:'warn', summary: 'Cliente Temporario Criado!', detail: 'Você não está logado, recomendamos criar uma conta caso não possua, seu produto está no carrinho', icon: 'pi pi-shopping-cart', life: 1000});
       }else if(status == 'erro'){
-        this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'O produto não pode ser adicionado ao carrinho'});
+        this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'O produto não pode ser adicionado ao carrinho', life: 1000});
+      }else if(status == 'existe'){
+        this.messageService.add({severity:'warn', summary: 'Algo deu Errado!', detail: 'O produto já está no carrinho', life: 1000});
       }
     });
   }

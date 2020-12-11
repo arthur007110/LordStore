@@ -34,6 +34,7 @@ export class ClienteService {
       if(produto.quantidade_estoque == 0){
         observer.next('semestoque');
         observer.complete();
+        return;
       }
 
       if(this.cliente.uid == "temp"){
@@ -70,6 +71,8 @@ export class ClienteService {
           }).catch(()=>{
             observer.next('erro');
           })
+        }else if(productExists && temEstoque){
+          observer.next('existe');
         }
       });
     });
@@ -119,29 +122,40 @@ export class ClienteService {
   aumentarQuantidadeProduto(produto: Produto){
     this.getClienteRef().get().subscribe(valor =>{
       valor.data().carrinho.produtos.forEach((Dproduto: any) => {
-        produto.quantidade_comprar = Dproduto.quantidade_comprar+1;
-        this.getClienteRef().update({
-          "carrinho.produtos": firebase.default.firestore.FieldValue.arrayRemove(Dproduto)
-        }).then(() =>{
+        if(Dproduto.codigo == produto.codigo){
+          produto.quantidade_comprar = Dproduto.quantidade_comprar+1;
           this.getClienteRef().update({
-            "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(produto)
+            "carrinho.produtos": firebase.default.firestore.FieldValue.arrayRemove(Dproduto)
+          }).then(() =>{
+            this.getClienteRef().update({
+              "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(produto)
+            });
           });
-        });
+        }
       });
     });
   }
 
   diminuirQuantidadeProduto(produto: Produto){
+    let remover: boolean = false;
     this.getClienteRef().get().subscribe(valor =>{
       valor.data().carrinho.produtos.forEach((Dproduto: any) => {
-        produto.quantidade_comprar = Dproduto.quantidade_comprar-1;
-        this.getClienteRef().update({
-          "carrinho.produtos": firebase.default.firestore.FieldValue.arrayRemove(Dproduto)
-        }).then(() =>{
+        if(Dproduto.codigo == produto.codigo){
+          if(produto.quantidade_comprar <= 1){
+            remover = true;
+            console.log(Dproduto, produto)
+          }
           this.getClienteRef().update({
-            "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(produto)
+            "carrinho.produtos": firebase.default.firestore.FieldValue.arrayRemove(Dproduto)
+          }).then(() =>{
+            if(!remover){
+              produto.quantidade_comprar = Dproduto.quantidade_comprar-1;
+              this.getClienteRef().update({
+                "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(produto)
+              });
+            }
           });
-        });
+        }
       });
     });
   }
@@ -183,14 +197,16 @@ export class ClienteService {
         valor.data().carrinho.produtos.forEach((produto: any) => {
           const new_produto = produto;
           this.produtoService.getProdutoEstoque(new_produto).subscribe(quantidade =>{
-            this.getClienteRef().update({
-              "carrinho.produtos": firebase.default.firestore.FieldValue.arrayRemove(produto)
-            }).then(() =>{
-              new_produto.quantidade_estoque = quantidade;
+            if(produto.quantidade_estoque != quantidade){
               this.getClienteRef().update({
-                "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(new_produto)
+                "carrinho.produtos": firebase.default.firestore.FieldValue.arrayRemove(produto)
+              }).then(() =>{
+                new_produto.quantidade_estoque = quantidade;
+                this.getClienteRef().update({
+                  "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(new_produto)
+                });
               });
-            });
+            }
           });
         });
       });

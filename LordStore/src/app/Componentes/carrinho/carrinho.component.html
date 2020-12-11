@@ -5,13 +5,22 @@
     [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} Produtos"
     [filterDelay]="0" [globalFilterFields]="['nome']">
     <ng-template pTemplate="caption">
-        <div class="table-header">
+        <div class="table-header horizontal">
             Carrinho
             <span class="p-input-icon-left">
                 <i class="pi pi-search"></i>
-                <input pInputText type="text" [(ngModel)]="inputText" (input)="dt.filterGlobal(inputText, 'contains')" placeholder="Global Search" />
+                <input  pInputText type="text" [(ngModel)]="inputText" (input)="dt.filterGlobal(inputText, 'contains')" placeholder="Global Search" />
             </span>
-            <button pButton type="button" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave" (click)="mostrarProdutosSelecionados()"></button>
+            <button pButton type="button" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
+        </div>
+        <div class="table-header vertical" style="text-align: center; display: block;">
+            Carrinho
+            <br>
+            <span class="p-input-icon-left" style="width: 100%;">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" [style]="{'width': '100%'}" [(ngModel)]="inputText" (input)="dt.filterGlobal(inputText, 'contains')" placeholder="Global Search" />
+            </span>
+            <button pButton type="button" [style]="{'width': '100%'}" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
         </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -19,14 +28,14 @@
             <th style="width: 3rem">
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="nome">
+            <th pSortableColumn="nome" style="width: 25%">
                 <div class="p-d-flex p-jc-between p-ai-center">
                     Nome
                     <p-sortIcon field="nome"></p-sortIcon>
-                    <p-columnFilter type="text" field="nome" display="menu" class="p-ml-auto"></p-columnFilter>
+                    <!--<p-columnFilter type="text" field="nome" display="menu" class="p-ml-auto"></p-columnFilter>-->
                 </div>
             </th>
-            <th>
+            <th style="width: 25%">
                 <div class="p-d-flex p-jc-between p-ai-center">
                     Imagem 
                     <ng-template pTemplate="header">
@@ -44,24 +53,24 @@
                     </ng-template>
                 </div>
             </th>
-            <th pSortableColumn="preco">
+            <th pSortableColumn="preco" style="width: 25%">
                 <div class="p-d-flex p-jc-between p-ai-center">
                     Preço
                     <p-sortIcon field="preco"></p-sortIcon>
-                    <p-columnFilter type="numeric" field="balance" display="menu" currency="BRL" class="p-ml-auto"></p-columnFilter>
+                    <!--<p-columnFilter type="numeric" field="balance" display="menu" currency="BRL" class="p-ml-auto"></p-columnFilter>-->
                 </div>
             </th>
-            <th pSortableColumn="quatidade">
+            <th pSortableColumn="quatidade" style="width: 25%">
                 <div class="p-d-flex p-jc-between p-ai-center">
                     Quantidade
-                    <p-sortIcon field="quantidade"></p-sortIcon>
-                    <p-columnFilter type="numeric" field="balance" display="menu" class="p-ml-auto"></p-columnFilter>
+                    <!--<p-sortIcon field="quantidade"></p-sortIcon>
+                    <p-columnFilter type="numeric" field="balance" display="menu" class="p-ml-auto"></p-columnFilter>-->
                 </div>
             </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-produto>
-        <tr class="p-selectable-row">
+        <tr class="p-selectable-row" style="padding-top: 0;">
             <td>
 
                 <!--<p-tableCheckbox [value]="produto"></p-tableCheckbox>-->
@@ -71,9 +80,9 @@
                 <span class="p-column-title">nome</span>
                 {{produto.nome}}
             </td>
-            <td>
+            <td style="background-image: url({{produto.imagem}}); background-repeat: no-repeat; background-repeat: no-repeat; background-position: 50% 50%; background-size: contain;">
                 <span class="p-column-title">imagem</span>
-                <img [alt]="produto.nome" src="{{produto.imagem}}" width="64" style="vertical-align: middle" />
+                <!--<img [alt]="produto.nome" src="{{produto.imagem}}" width="128" style="vertical-align: middle" />-->
             </td>
             <td>
                 {{produto.preco | currency:'BRL':'symbol'}}
@@ -81,7 +90,9 @@
             <td>
                 <div class="p-grid">
                     <div class="p-col-2">
-                        <button [style]="{'width': '100%', 'height': '100%'}" pButton type="button" class="p-button-secondary p-button-sm" icon="fas fa-minus" (click)="diminuirQuantidade(produto)" [disabled]="produto.quantidade_comprar == 0"></button>
+                        <p-confirmPopup></p-confirmPopup>
+                        <button [style]="{'width': '100%', 'height': '100%'}" pButton type="button" class="p-button-danger p-button-sm" icon="fas fa-minus" (click)="removerProduto($event, produto)" *ngIf="produto.quantidade_comprar <= 1" [disabled]="produto.quantidade_comprar == 0"></button>
+                        <button [style]="{'width': '100%', 'height': '100%'}" pButton type="button" class="p-button-secondary p-button-sm" icon="fas fa-minus" (click)="diminuirQuantidade(produto)" *ngIf="produto.quantidade_comprar > 1" [disabled]="produto.quantidade_comprar == 0"></button>
                     </div>
                     <div class="p-col-8">
                         <p-card [style]="{'width': '100%', 'height': '100%', 'text-align': 'center'}" class="p-shadow-24">
@@ -99,7 +110,9 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="8">Você ainda não adicionou produtos ao carrinho!</td>
+            <td colspan="8">Você ainda não possui produtos no carrinho!</td>
         </tr>
     </ng-template>
 </p-table>
+
+<app-rodape></app-rodape>

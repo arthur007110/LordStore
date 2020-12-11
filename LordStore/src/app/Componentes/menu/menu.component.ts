@@ -102,7 +102,7 @@ export class MenuComponent implements OnInit {
     if(this.clienteService.getClienteUID() == "temp"){
       this.clienteService.getQuantidadeProutosCarrinhoTemp().subscribe(valor =>{
         this.carrinho = valor;
-      })
+      });
     }else{
       this.clienteService.getQuantidadeProutosCarrinho().subscribe(valor =>{
         this.carrinho = valor;
