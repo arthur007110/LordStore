@@ -33,7 +33,9 @@ export class MenuComponent implements OnInit {
 
   ngDoCheck() {
     if(this.clienteService.cliente.uid == "temp" && this.clienteService.cliente.carrinho.produtos.length !=0){
-      this.carrinho = this.clienteService.cliente.carrinho.produtos.length-1;
+      if(this.clienteService.cliente.carrinho.produtos[0].codigo == '00000'){
+        this.carrinho = this.clienteService.cliente.carrinho.produtos.length-1;
+      }
     }
   }
 
@@ -69,7 +71,7 @@ export class MenuComponent implements OnInit {
 
   criarProduto(){
     console.log('1')
-    let produto = new Produto("codigo", "Bermuda Degradê", "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ_gIbQ3i0tviR184SByrgHaUysalNeQD2Oz2QTv8aC87yFr9oGoVuUrvlg97qdGOb3X-nA_3YmRLvZed-bj9Ud_w9PwA6GpNENHkLQKT27wVO7xT3aKGRp&usqp=CAE", 25, 0, new TipoProduto("Bermuda"), new Categoria("ROUPAS"), 0, false);
+    let produto = new Produto("codigo", "Bermuda Degradê", "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ_gIbQ3i0tviR184SByrgHaUysalNeQD2Oz2QTv8aC87yFr9oGoVuUrvlg97qdGOb3X-nA_3YmRLvZed-bj9Ud_w9PwA6GpNENHkLQKT27wVO7xT3aKGRp&usqp=CAE", 25, 0, new TipoProduto("Bermuda"), new Categoria("ROUPAS"), 0);
 
     let record = {
       id: '',
@@ -80,8 +82,7 @@ export class MenuComponent implements OnInit {
       quantidade_estoque: produto.quantidade_estoque,
       tipo_produto: {nome: produto.tipo_produto.nome},
       categoria: {nome: produto.categoria.nome},
-      quantidade_comprar: produto.quantidade_comprar,
-      is_on_cart: produto.is_on_cart
+      quantidade_comprar: produto.quantidade_comprar
     };
         this.produtoService.criar_novo_produto(record).then(resp => {
           console.log(resp);

@@ -1,5 +1,5 @@
 <app-menu></app-menu>
-
+<button pButton type="button" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave" (click)="teste()"></button>
 <p-table #dt [value]="produtos" [(selection)]="selectedProdutos" dataKey="id" styleClass="p-datatable-customers" [rowHover]="true"
     [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,15]" [loading]="loading"
     [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} Produtos"

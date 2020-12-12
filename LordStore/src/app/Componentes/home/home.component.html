@@ -1,5 +1,6 @@
 <app-menu (filtroEvent) = filtrar($event)></app-menu>
 <p-toast position="top-left"></p-toast>
+<button pButton type="button" (click)="teste()" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
 <div class="card">
     <p-dataView #dv [value]="produtos" [paginator]="true" [rows]="9" filterBy="nome,categoria.nome,tipo_produto.nome" 
         [sortField]="sortField" [sortOrder]="sortOrder" layout="grid" emptyMessage = "Não Foram Encontrados Produtos">

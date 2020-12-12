@@ -4,7 +4,7 @@ import { Produto } from '../Modelos/Produto';
 import { AuthService } from './auth.service';
 import * as firebase from 'firebase/app';
 import { ProdutoService } from './produto.service';
-import { interval, Observable } from 'rxjs';
+import { interval, Observable, timer } from 'rxjs';
 import { Carrinho } from '../Modelos/Carrinho';
 
 @Injectable({
@@ -14,7 +14,22 @@ export class ClienteService {
 
   cliente = {
     uid: "temp",
-    carrinho: { produtos: [{}]}
+    carrinho: { produtos: [{
+      codigo: '00000',
+      nome: '',
+      imagem: 'string',
+      preco: 0,
+      quantidade_estoque: 0,
+      tipo_produto: {
+        id: '',
+        nome: ''
+      },
+      categoria: {
+        id: '',
+        nome: ''
+      },
+      quantidade_comprar: 0
+    }]}
   }
   constructor(private authService: AuthService,
               public afs: AngularFirestore,
@@ -40,6 +55,8 @@ export class ClienteService {
       if(this.cliente.uid == "temp"){
         this.adicionarProdutoAoCarrinhoTemp(produto);
         observer.next('clientetemporario');
+        observer.complete();
+        return;
       }
 
       let temEstoque = true;
@@ -81,8 +98,16 @@ export class ClienteService {
   adicionarProdutoAoCarrinhoTemp(produto: Produto){
     if(!this.produtoJaExisteNaListaTemp(produto.codigo)){
       this.cliente.carrinho.produtos.push(produto);
-      localStorage.setItem('cliente' ,JSON.stringify(this.cliente));
+      this.atualizarUsuarioTemporario();
     }
+  }
+
+  atualizarUsuarioTemporario(){
+    localStorage.setItem('cliente' ,JSON.stringify(this.cliente));
+  }
+
+  getUsuarioTemporiario(){
+    return JSON.parse(localStorage.getItem('cliente')!);
   }
 
   produtoJaExisteNaListaTemp(codigo: string){
@@ -100,6 +125,11 @@ export class ClienteService {
   getClienteRef(){
     let clienteRef: AngularFirestoreDocument<any> = this.afs.doc(`Clientes/${this.cliente.uid}`);
     return clienteRef;
+  }
+
+  getProdutosClienteTemp(){
+    this.verificarUsuario();
+    return this.cliente.carrinho.produtos;
   }
 
   getQuantidadeProutosCarrinhoTemp(){
@@ -120,6 +150,12 @@ export class ClienteService {
   }
 
   aumentarQuantidadeProduto(produto: Produto){
+
+    if(this.cliente.uid == "temp"){
+      this.aumentarQuantidadeProdutoTemp(produto);
+      return;
+    }
+
     this.getClienteRef().get().subscribe(valor =>{
       valor.data().carrinho.produtos.forEach((Dproduto: any) => {
         if(Dproduto.codigo == produto.codigo){
@@ -137,6 +173,11 @@ export class ClienteService {
   }
 
   diminuirQuantidadeProduto(produto: Produto){
+    if(this.cliente.uid == "temp"){
+      this.diminuirQuantidadeProdutoTemp(produto);
+      return;
+    }
+
     let remover: boolean = false;
     this.getClienteRef().get().subscribe(valor =>{
       valor.data().carrinho.produtos.forEach((Dproduto: any) => {
@@ -160,6 +201,30 @@ export class ClienteService {
     });
   }
 
+  aumentarQuantidadeProdutoTemp(produto: Produto){
+    this.cliente.carrinho.produtos.forEach((produto_c, index) =>{
+      if(produto.codigo == produto_c.codigo){
+        if(produto.quantidade_comprar < produto.quantidade_estoque){
+          produto_c.quantidade_comprar++;
+        }
+      }
+    });
+    this.atualizarUsuarioTemporario();
+  }
+
+  diminuirQuantidadeProdutoTemp(produto: Produto){
+    this.cliente.carrinho.produtos.forEach((produto_c, index) =>{
+      if(produto.codigo == produto_c.codigo){
+        if(produto_c.quantidade_comprar -1 > 0){
+          produto_c.quantidade_comprar--;
+        }else{
+          this.cliente.carrinho.produtos.splice(index, 1);
+        }
+      }
+    });
+    this.atualizarUsuarioTemporario();
+  }
+
 
   getClienteUID(){
     this.verificarUsuario();
@@ -175,8 +240,24 @@ export class ClienteService {
   criar_usuario_temporario(){
     this.cliente = {
       uid: "temp",
-      carrinho: { produtos: [{}]}
+      carrinho: { produtos: [{
+        codigo: '00000',
+        nome: '',
+        imagem: 'string',
+        preco: 0,
+        quantidade_estoque: 0,
+        tipo_produto: {
+          id: '',
+          nome: ''
+        },
+        categoria: {
+          id: '',
+          nome: ''
+        },
+        quantidade_comprar: 0
+      }]}
     }
+    this.atualizarUsuarioTemporario();
     console.log("usuario temporario criado!")
   }
 

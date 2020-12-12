@@ -42,6 +42,9 @@ export class HomeComponent implements OnInit {
     (<HTMLInputElement>document.getElementById("filter")).value = filtro;
     (<HTMLInputElement>document.getElementById("filter")).dispatchEvent(new Event('input'));
   }
+  teste(){
+    console.log(this.clienteService.cliente);
+  }
 
   comprar(produto: any){
     this.clienteService.adicionarProdutoAoCarrinho(produto).subscribe(status =>{

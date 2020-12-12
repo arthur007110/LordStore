@@ -32,8 +32,7 @@ export class ProdutoService {
         valor.quantidade_estoque,
         valor.tipo_produto,
         valor.categoria,
-        valor.quantidade_comprar,
-        valor.is_on_cart
+        valor.quantidade_comprar
       ));
     });
   }
