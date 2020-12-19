@@ -11,7 +11,6 @@ export class ProdutoService {
 
   produtos: Produto[];
 
-  
   constructor(private firestore: AngularFirestore) { 
     
     let ProdutosObservable = firestore.collection('produtos').valueChanges();

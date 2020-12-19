@@ -14,7 +14,7 @@ export class CarrinhoComponent implements OnInit {
 
   inputText: string;
 
-  produtos: any[];
+  produtos: any[] = [];
 
   selectedProdutos: any[];
 
@@ -28,7 +28,7 @@ export class CarrinhoComponent implements OnInit {
               private clienteService: ClienteService) { }
 
   ngOnInit() {
-    if(this.clienteService.cliente.uid == "temp"){
+    if(this.clienteService.getClienteUID() == "temp"){
       this.atualizarProdutosTemp();
       this.loading = false;
     }else{
@@ -81,7 +81,7 @@ export class CarrinhoComponent implements OnInit {
   }
 
   aumentarQuantidade(produto: Produto){
-    if(this.clienteService.cliente.uid == 'temp'){
+    if(this.clienteService.getClienteUID() == 'temp'){
       this.clienteService.aumentarQuantidadeProdutoTemp(produto);
       this.atualizarProdutosTemp();
     }else{
@@ -90,7 +90,7 @@ export class CarrinhoComponent implements OnInit {
   }
 
   diminuirQuantidade(produto: Produto){
-    if(this.clienteService.cliente.uid == 'temp'){
+    if(this.clienteService.getClienteUID() == 'temp'){
       this.clienteService.diminuirQuantidadeProdutoTemp(produto);
       this.atualizarProdutosTemp();
     }else{
@@ -110,7 +110,7 @@ export class CarrinhoComponent implements OnInit {
       acceptLabel: 'Remover',
       rejectLabel: 'Não',
       accept: () => {
-        if(this.clienteService.cliente.uid == "temp"){
+        if(this.clienteService.getClienteUID() == "temp"){
           let time = timer(500, 1000).subscribe(() =>{
             this.diminuirQuantidade(produto);
             time.unsubscribe();

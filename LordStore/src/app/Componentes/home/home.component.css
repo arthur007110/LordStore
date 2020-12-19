@@ -23,16 +23,24 @@
     padding: 1rem;
     width: 100%;
 }
+:host ::ng-deep .product-list-item-vertical {
+    align-items: center;
+    padding: 1rem;
+    width: 100%;
+}
 :host ::ng-deep .product-list-item img {
+    width: 150px;
+    
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    margin-right: 2rem;
+}
+:host ::ng-deep .product-list-item-vertical img {
     width: 150px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     margin-right: 2rem;
 }
 :host ::ng-deep .product-list-item .product-list-detail {
-    flex: 1 1 0;
-}
-:host ::ng-deep .product-list-item .p-rating {
-    margin: 0 0 0.5rem 0;
+    /*flex: 1 1 0;*/
 }
 :host ::ng-deep .product-list-item .product-price {
     font-size: 1.5rem;
@@ -74,6 +82,14 @@
     border-radius: 4px;
     margin-bottom: 2rem;
 }
+.area{
+    height: 100px;
+    width: 100px;
+    margin:10px;
+    text-align: center;
+    display:table-cell;
+    vertical-align:middle;
+}​
 .status-altoestoque{
     background-color: #C8E6C9;
     color: #256029;

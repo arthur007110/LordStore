@@ -31,11 +31,15 @@ export class ClienteService {
       quantidade_comprar: 0
     }]}
   }
+
+  carregarUsuarioTemporario: boolean = false;
+
   constructor(private authService: AuthService,
               public afs: AngularFirestore,
               private produtoService: ProdutoService) { 
 
     this.cliente = authService.clienteData;
+    console.log(this.cliente);
     this.verificarUsuario();
 
   }
@@ -103,6 +107,7 @@ export class ClienteService {
   }
 
   atualizarUsuarioTemporario(){
+    console.log(1)
     localStorage.setItem('cliente' ,JSON.stringify(this.cliente));
   }
 
@@ -144,7 +149,10 @@ export class ClienteService {
   getQuantidadeProutosCarrinho(){
     return new Observable<any>(observer =>{
       this.getClienteRef().valueChanges().subscribe(cliente =>{
-        observer.next(cliente.carrinho.produtos.length);
+        if(cliente != null && cliente != undefined){
+          console.log(cliente.carrinho)
+          observer.next(cliente.carrinho.produtos.length);
+        }
       });
     });
   }
@@ -262,27 +270,54 @@ export class ClienteService {
   }
 
   verificarUsuario(){
-    if(this.cliente == undefined && this.authService.clienteData != undefined){
-      this.cliente = this.authService.clienteData;
-    }else if(JSON.parse(localStorage.getItem('cliente')!) != undefined && Object.keys(JSON.parse(localStorage.getItem('cliente')!)).length !== 0 && JSON.parse(localStorage.getItem('cliente')!) != null){
-      this.cliente = JSON.parse(localStorage.getItem('cliente')!);
-    }else{
-      this.criar_usuario_temporario();
+
+    let cliente_temp = JSON.parse(localStorage.getItem('cliente')!);
+
+    if(this.cliente == undefined || this.cliente == null || Object.keys(this.cliente).length === 0){
+      if(this.authService.clienteData != undefined){
+        this.cliente = this.authService.clienteData;
+        this.limpartCache();
+        console.log(this.cliente.uid)
+      }else if(cliente_temp != undefined && cliente_temp != null && Object.keys(cliente_temp).length !== 0){
+        this.cliente = cliente_temp;
+      }else{
+        if(this.carregarUsuarioTemporario){
+          this.criar_usuario_temporario();
+        }else{
+          this.carregarUsuarioTemporario = true;
+        }
+      }
     }
     this.atualizaEstoqueProdutos();
   }
 
+  carregarProdutosParaClienteBD(){
+    //TODO
+  }
+
+  limpartCache(){
+    localStorage.clear();
+  }
+
   atualizaEstoqueProdutos(){
-    if(this.cliente.uid != "temp"){
+    if(this.cliente == null || this.cliente == undefined){
+      return;
+    }else if(this.cliente.uid != "temp" && this.cliente.uid != null){
+      console.log(1)
       this.getClienteRef().get().subscribe(valor =>{
+        console.log(2)
         valor.data().carrinho.produtos.forEach((produto: any) => {
+          console.log(3)
           const new_produto = produto;
           this.produtoService.getProdutoEstoque(new_produto).subscribe(quantidade =>{
+            console.log(4, produto.quantidade_estoque)
             if(produto.quantidade_estoque != quantidade){
+              console.log(5)
               this.getClienteRef().update({
                 "carrinho.produtos": firebase.default.firestore.FieldValue.arrayRemove(produto)
               }).then(() =>{
                 new_produto.quantidade_estoque = quantidade;
+                console.log('quantidade:', quantidade)
                 this.getClienteRef().update({
                   "carrinho.produtos": firebase.default.firestore.FieldValue.arrayUnion(new_produto)
                 });

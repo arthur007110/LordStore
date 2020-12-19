@@ -1,6 +1,5 @@
 <app-menu (filtroEvent) = filtrar($event)></app-menu>
 <p-toast position="top-left"></p-toast>
-<button pButton type="button" (click)="teste()" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
 <div class="card">
     <p-dataView #dv [value]="produtos" [paginator]="true" [rows]="9" filterBy="nome,categoria.nome,tipo_produto.nome" 
         [sortField]="sortField" [sortOrder]="sortOrder" layout="grid" emptyMessage = "Não Foram Encontrados Produtos">
@@ -46,18 +45,46 @@
         </ng-template>
         <ng-template let-product pTemplate="listItem">
             <div class="p-col-12">
-                <div class="product-list-item">
-                    <img [src]="product.imagem" [alt]="product.name"/>
-                    <div class="product-list-detail">
-                        <div class="product-name">{{product.nome}}</div>
-                        <div class="product-description">{{product.tipo_produto.nome}}</div>
-                        <i class="pi pi-tag product-category-icon"></i><span class="product-category">{{product.categoria.nome}}</span>
+                <div class="product-list-item horizontalmenu">
+                    <div class="p-grid">
+                        <div class="p-col">
+                            <img [src]="product.imagem" [alt]="product.name"/>
+                        </div>
+                        <div class="p-col">
+                            <div class="product-list-detail">
+                                <div class="product-name">{{product.nome}}</div>
+                                <div class="product-description">{{product.tipo_produto.nome}}</div>
+                                <i class="pi pi-tag product-category-icon"></i><span class="product-category">{{product.categoria.nome}}</span>
+                            </div>
+                            <div class="product-list-action">
+                                <!--<span class="product-price">R$ {{product.preco}}</span>-->
+                                <div class="price">R$ {{product.preco}}</div>
+                                <p-button icon="pi pi-shopping-cart" label="Add to Cart" [disabled]="produtoService.getStatusProduto(product) === 'SEMESTOQUE'" (click)="comprar(product)"></p-button>
+                                <!--<span [class]="'product-badge status-' + produtoService.getStatusProduto(product).toLowerCase()">{{produtoService.getStatusProduto(product)}}</span>-->
+                            </div>
+                        </div>
                     </div>
-                    <div class="product-list-action">
-                        <!--<span class="product-price">R$ {{product.preco}}</span>-->
-                        <div class="price">R$ {{product.preco}}</div>
-                        <p-button icon="pi pi-shopping-cart" label="Add to Cart" [disabled]="produtoService.getStatusProduto(product) === 'SEMESTOQUE'"></p-button>
-                        <!--<span [class]="'product-badge status-' + produtoService.getStatusProduto(product).toLowerCase()">{{produtoService.getStatusProduto(product)}}</span>-->
+                </div>
+                <div class="product-list-item-vertical verticalmenu">
+                    <div class="p-grid">
+                        <div class="p-col">
+                            <img [src]="product.imagem" [alt]="product.name"/>
+                        </div>
+                        <div class="p-col">
+                            <div class="product-list-detail area">
+                                <div class="product-name">{{product.nome}}</div>
+                                <div class="product-description">{{product.tipo_produto.nome}}</div>
+                                <i class="pi pi-tag product-category-icon"></i><span class="product-category">{{product.categoria.nome}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-4">
+                            <div class="price" style="width: 100%; text-align: center;">R$ {{product.preco}}</div>
+                        </div>
+                        <div class="p-col">
+                            <p-button [style]="{'width': '100%'}" icon="pi pi-shopping-cart" label="Add to Cart" [disabled]="produtoService.getStatusProduto(product) === 'SEMESTOQUE'" (click)="comprar(product)"></p-button>
+                        </div>
                     </div>
                 </div>
             </div>
