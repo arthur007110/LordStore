@@ -1,1 +1,60 @@
 <app-menu></app-menu>
+
+<p-table [value]="pedidos" dataKey="id">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem"></th>
+            <th >Pedido ID</th>
+            <th >Situação</th>
+            <th pSortableColumn="data">Data <p-sortIcon field="data"></p-sortIcon></th>
+            <th>Metodo Pagamento</th>
+            <th pSortableColumn="preco">Preço Total <p-sortIcon field="preco"></p-sortIcon></th>
+            <th> Chat </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-pedido let-expanded="expanded">
+        <tr>
+            <td>
+                <button type="button" pButton pRipple [pRowToggler]="pedido" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td>{{pedido.id}}</td>
+            <td><div class="status-{{pedidoService.getSituacaoPedido(pedido).toLowerCase()}}">{{pedido.situacao}}</div></td>
+            <td>{{pedido.data}}</td>
+            <td>{{pedido.metodo_pagamento}}</td>
+            <td>{{pedido.preco | currency:'BRL'}}</td>
+            <td> <button pButton label="Chat" icon="fa fa-inbox"></button> </td>
+            <!--<td><span [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span></td>-->
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-pedido>
+        <tr>
+            <td colspan="7">
+                <div class="p-p-3">
+                    <p-table [value]="pedido.produtos" dataKey="id">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="nome">Nome <p-sortIcon field="nome"></p-sortIcon></th>
+                                <th >Imagem </th>
+                                <th pSortableColumn="quantidade">Quantidade <p-sortIcon field="quantidade"></p-sortIcon></th>
+                                <th pSortableColumn="preco">Preço <p-sortIcon field="preco"></p-sortIcon></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-produto>
+                            <tr>
+                                <td>{{produto.nome}}</td>
+                                <td>{{produto.imagem}}</td>
+                                <td>{{produto.quantidade}}</td>
+                                <td>{{produto.preco | currency:'BRL'}}</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="6">Não há Produtos neste Pedido.</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

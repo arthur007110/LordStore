@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MessageService, PrimeNGConfig, SelectItem } from 'primeng/api';
 import { ProdutoService } from 'src/app/Servicos/produto.service';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
+import { PedidoService } from 'src/app/Servicos/pedido.service';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,8 @@ export class HomeComponent implements OnInit {
   constructor(private primengConfig: PrimeNGConfig,
               public produtoService: ProdutoService,
               public clienteService: ClienteService,
-              private messageService: MessageService) { }
+              private messageService: MessageService,
+              private pedidosService: PedidoService) { }
 
   produtos: any[];
 
@@ -45,7 +47,9 @@ export class HomeComponent implements OnInit {
   teste(){
     console.log(this.clienteService.cliente);
   }
-
+  mostrarTeste(){
+    this.pedidosService.getPedidosCliente("01");
+  }
   comprar(produto: any){
     this.clienteService.adicionarProdutoAoCarrinho(produto).subscribe(status =>{
       if(status == 'adicionado'){

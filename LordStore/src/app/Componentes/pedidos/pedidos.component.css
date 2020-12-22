@@ -1,0 +1,48 @@
+.status-confirmado{
+    text-align: center;
+    background-color: #C8E6C9;
+    color: #256029;
+    font-weight: bold;
+    border-radius:2%;
+    padding: 1px 4px 1px 4px;
+}
+.status-entregue{
+    text-align: center;
+    background-color: #C8E6C9;
+    color: #256029;
+    font-weight: bold;
+    border-radius:2%;
+    padding: 1px 4px 1px 4px;
+}
+.status-processando{
+    text-align: center;
+    background-color: #FEEDAF;
+    color: #8A5340;
+    font-weight: bold;
+    border-radius:2%;
+    padding: 1px 4px 1px 4px;
+}
+.status-emrotadeentrega{
+    text-align: center;
+    background-color: #FEEDAF;
+    color: #8A5340;
+    font-weight: bold;
+    border-radius:2%;
+    padding: 1px 4px 1px 4px;
+}
+.status-pedidonaopodeserconfirmado{
+    text-align: center;
+    background-color: #FFCDD2;
+    color: #CA3737;
+    font-weight: bold;
+    border-radius:2%;
+    padding: 1px 4px 1px 4px;
+}
+.status-entreganaopodeserefetuada{
+    text-align: center;
+    background-color: #FFCDD2;
+    color: #CA3737;
+    font-weight: bold;
+    border-radius:2%;
+    padding: 1px 4px 1px 4px;
+}

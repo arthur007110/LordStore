@@ -56,6 +56,7 @@ import { MessageService } from 'primeng/api';
 const routes: Routes = [
   { path: 'cadastro', component: CadastroComponent },//Tela de Cadastro
   { path: 'login', component: LoginComponent },//Tela de Login
+  { path: 'perfil', component: PerfilComponent },//Tela de Login
   { path: 'pedidos', component: PedidosComponent },//Tela de Login
   { path: 'enderecos', component: EnderecosComponent },//Tela de Login
   { path: 'carrinho', component: CarrinhoComponent },//Tela de Listagem do Carinho

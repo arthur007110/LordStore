@@ -11,16 +11,15 @@ export class Pedido{
     metodo_pagamento: MetodoPagamento;
     situacao: Situacao;
     endereco: Endereco;
-    preco_frete: number;//[Place_Holder]
+    //preco_frete: number;//[Place_Holder]
 
-    constructor(id: string, cliente_id: string, produtos: Produto[], data: Date, metodo_pagamento: MetodoPagamento, situacao: Situacao, endereco: Endereco, preco_frete: number){
-        this.id = id;
+    constructor( cliente_id: string, produtos: Produto[], data: Date, metodo_pagamento: MetodoPagamento, situacao: Situacao, endereco: Endereco/*, preco_frete: number*/){
         this.cliente_id = cliente_id;
         this.produtos = produtos;
         this.data = data;
         this.metodo_pagamento = metodo_pagamento;
         this.situacao = situacao;
         this.endereco = endereco;
-        this.preco_frete = preco_frete;//[Place_Holder]
+        //this.preco_frete = preco_frete;//[Place_Holder]
     }
 }
