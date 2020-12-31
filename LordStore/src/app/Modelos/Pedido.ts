@@ -1,3 +1,4 @@
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
 import { Endereco } from './Endereco';
 import { MetodoPagamento } from './MetodoPagamento';
 import { Produto } from './Produto';
@@ -7,13 +8,13 @@ export class Pedido{
     id: string;
     cliente_id: string;
     produtos: Produto[];
-    data: Date;
+    data: any;
     metodo_pagamento: MetodoPagamento;
-    situacao: Situacao;
+    situacao: String;
     endereco: Endereco;
     //preco_frete: number;//[Place_Holder]
 
-    constructor( cliente_id: string, produtos: Produto[], data: Date, metodo_pagamento: MetodoPagamento, situacao: Situacao, endereco: Endereco/*, preco_frete: number*/){
+    constructor( cliente_id: string, produtos: Produto[], data: any, metodo_pagamento: MetodoPagamento, situacao: String, endereco: Endereco/*, preco_frete: number*/){
         this.cliente_id = cliente_id;
         this.produtos = produtos;
         this.data = data;

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { PedidoService } from 'src/app/Servicos/pedido.service';
 
@@ -10,7 +11,8 @@ import { PedidoService } from 'src/app/Servicos/pedido.service';
 export class PedidosComponent implements OnInit {
 
   constructor(public pedidoService: PedidoService,
-              private clienteService: ClienteService) { }
+              private clienteService: ClienteService,
+              private firestore: AngularFirestore) { }
 
   pedidos: any[] = [];
 

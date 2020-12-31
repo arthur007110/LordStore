@@ -4,8 +4,12 @@ import { Produto } from '../Modelos/Produto';
 import { AuthService } from './auth.service';
 import * as firebase from 'firebase/app';
 import { ProdutoService } from './produto.service';
-import { interval, Observable, timer } from 'rxjs';
-import { Carrinho } from '../Modelos/Carrinho';
+import { interval, Observable } from 'rxjs';
+import { Pedido } from '../Modelos/Pedido';
+import { MetodoPagamento } from '../Modelos/MetodoPagamento';
+import { Situacao } from '../Modelos/Situacao';
+import { Endereco } from '../Modelos/Endereco';
+import { PedidoService } from './pedido.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +40,8 @@ export class ClienteService {
 
   constructor(private authService: AuthService,
               public afs: AngularFirestore,
-              private produtoService: ProdutoService) { 
+              private produtoService: ProdutoService,
+              private pedidosService: PedidoService) { 
 
     this.cliente = authService.clienteData;
     this.verificarUsuario();
@@ -105,11 +110,60 @@ export class ClienteService {
     }
   }
 
+  gerarPedido(produtos: any, metodo_pagamento: MetodoPagamento, endereco: Endereco){
+
+    this.analisarEstoqueProdutos(produtos).subscribe(estoque =>{
+      if(estoque){
+        let pedido: Pedido = {
+          id: "",
+          cliente_id: this.cliente.uid,
+          produtos: produtos,
+          data: new Date(), //firebase.default.firestore.FieldValue.serverTimestamp(),
+          metodo_pagamento: metodo_pagamento,
+          situacao: new Situacao().situacao[0],
+          endereco: endereco
+        };
+        this.pedidosService.criarPedido(pedido);
+      }
+    });
+
+  }
+
+  analisarEstoqueProdutos(produtos: any){
+    let analiseEstoque = true;
+    let produtosAnalisados = 0;
+
+    return new Observable(observer =>{
+      produtos.forEach((produto: any) => {
+        this.quantidadeProdutosDisponivel(produto).subscribe(estoque =>{
+          if(!estoque){
+            analiseEstoque = false;
+          }
+          produtosAnalisados++;
+        });
+        if(produtosAnalisados == produtos.length){
+          observer.next(analiseEstoque);
+        }
+      });
+    });
+  }
+
+  quantidadeProdutosDisponivel(produto: any){
+    return new Observable(observer =>{
+      this.produtoService.getProdutoEstoque(produto).subscribe((quantidade_estoque: any) =>{
+        observer.next(produto.quantidade_comprar <= quantidade_estoque);
+      });
+    });
+  }
+
   getNomeCliente(){
     return new Observable(observer =>{
-      this.getClienteRef().valueChanges().subscribe(cliente =>{
-        observer.next(cliente.nome);
-      });
+      let clienteRef = this.getClienteRef();
+      if(clienteRef){
+        clienteRef.valueChanges().subscribe(cliente =>{
+          observer.next(cliente.nome);
+        });
+      }
     });
   }
 

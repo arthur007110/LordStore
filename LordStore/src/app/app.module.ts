@@ -37,6 +37,10 @@ import {CheckboxModule} from 'primeng/checkbox';
 import {ToastModule} from 'primeng/toast';
 import {ConfirmPopupModule} from 'primeng/confirmpopup';
 import {ConfirmationService} from 'primeng/api';
+import {DynamicDialogModule} from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
+import {InputMaskModule} from 'primeng/inputmask';
+import {InputNumberModule} from 'primeng/inputnumber';
 
 //Componentes
 import { LoginComponent } from './Componentes/login/login.component';
@@ -50,7 +54,8 @@ import { ValidarEmailComponent } from './Componentes/validar-email/validar-email
 import { RedefinirSenhaComponent } from './Componentes/redefinir-senha/redefinir-senha.component';
 import { PerfilComponent } from './Componentes/perfil/perfil.component';
 import { CarrinhoComponent } from './Componentes/carrinho/carrinho.component'
-import { MessageService } from 'primeng/api';
+import { FinalizarPedidoComponent } from './Componentes/finalizar-pedido/finalizar-pedido.component';
+import { CadastrarEnderecoComponent } from './Componentes/cadastrar-endereco/cadastrar-endereco.component';
 
 // Rotas das Páginas
 const routes: Routes = [
@@ -79,7 +84,9 @@ const routes: Routes = [
     ValidarEmailComponent,
     RedefinirSenhaComponent,
     PerfilComponent,
-    CarrinhoComponent
+    CarrinhoComponent,
+    FinalizarPedidoComponent,
+    CadastrarEnderecoComponent
   ],
   imports: [
     BrowserModule,
@@ -105,6 +112,9 @@ const routes: Routes = [
     CheckboxModule,
     ToastModule,
     ConfirmPopupModule,
+    DynamicDialogModule,
+    InputMaskModule,
+    InputNumberModule,
 
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),
@@ -114,6 +124,9 @@ const routes: Routes = [
     RouterModule
   ],
   providers: [AuthService, MessageService, ConfirmationService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    CadastrarEnderecoComponent
+  ]
 })
 export class AppModule { }

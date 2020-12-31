@@ -1,0 +1,32 @@
+<div class="p-grid">
+    <div class="p-col-8">
+        <span class="p-float-label">
+            <input id="rua-input" type="text" pInputText [style]="{'width': '100%'}" autocomplete="shipping address-line1"> 
+            <label for="rua-input">Rua</label>
+        </span>
+    </div>
+    <div class="p-col-4">
+        <p-dropdown [options]="bairros" [style]="{'width': '100%'}" [(ngModel)]="bairroSelecionado" optionLabel="nome" optionDisabled="inativo" placeholder="Bairro" autocomplete="shipping region"></p-dropdown>
+    </div>
+    <div class="p-col-12">
+        <span class="p-float-label">
+            <input id="referencia-input" type="text" pInputText [style]="{'width': '100%'}" autocomplete="address-line2"> 
+            <label for="referencia-input">Ponto de Referência</label>
+        </span>
+    </div>
+    <div class="p-col-4">
+        <span class="p-float-label">
+            <p-inputNumber id="numero-input" [showButtons]="true" [min]="0" [style]="{'width': '100%'}" mode="decimal"></p-inputNumber>
+            <label for="numero-input">Número</label>
+        </span>
+    </div>
+    <div class="p-col-8">
+        <span class="p-float-label">
+            <p-inputMask id="telefone-input" mask="(99)99999-9999" [style]="{'width': '100%'}" autocomplete="tel"></p-inputMask>
+            <label for="telefone-input">Telefone Contato</label>
+        </span>
+    </div>
+    <div class="p-col-12">
+        <button pButton label="Cadastrar Endereço" [style]="{'width': '100%'}" icon="pi pi-map-marker"></button>
+    </div>
+</div>
