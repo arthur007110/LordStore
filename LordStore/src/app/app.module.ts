@@ -41,6 +41,7 @@ import {DynamicDialogModule} from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import {InputMaskModule} from 'primeng/inputmask';
 import {InputNumberModule} from 'primeng/inputnumber';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
 
 //Componentes
 import { LoginComponent } from './Componentes/login/login.component';
@@ -56,6 +57,7 @@ import { PerfilComponent } from './Componentes/perfil/perfil.component';
 import { CarrinhoComponent } from './Componentes/carrinho/carrinho.component'
 import { FinalizarPedidoComponent } from './Componentes/finalizar-pedido/finalizar-pedido.component';
 import { CadastrarEnderecoComponent } from './Componentes/cadastrar-endereco/cadastrar-endereco.component';
+import { EditarEnderecoComponent } from './Componentes/editar-endereco/editar-endereco.component';
 
 // Rotas das Páginas
 const routes: Routes = [
@@ -86,7 +88,8 @@ const routes: Routes = [
     PerfilComponent,
     CarrinhoComponent,
     FinalizarPedidoComponent,
-    CadastrarEnderecoComponent
+    CadastrarEnderecoComponent,
+    EditarEnderecoComponent
   ],
   imports: [
     BrowserModule,
@@ -115,6 +118,7 @@ const routes: Routes = [
     DynamicDialogModule,
     InputMaskModule,
     InputNumberModule,
+    ConfirmDialogModule,
 
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),
@@ -126,7 +130,8 @@ const routes: Routes = [
   providers: [AuthService, MessageService, ConfirmationService],
   bootstrap: [AppComponent],
   entryComponents: [
-    CadastrarEnderecoComponent
+    CadastrarEnderecoComponent,
+    EditarEnderecoComponent
   ]
 })
 export class AppModule { }

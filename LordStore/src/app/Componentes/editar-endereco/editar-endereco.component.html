@@ -1,0 +1,36 @@
+<p-toast position="top-left"></p-toast>
+<div class="p-grid">
+    <div class="p-col-8">
+        <span class="p-float-label">
+            <input id="rua-input" type="text" [(ngModel)]="endereco.rua" pInputText [style]="{'width': '100%'}" autocomplete="shipping address-line1"> 
+            <label for="rua-input">Rua</label>
+        </span>
+    </div>
+    <div class="p-col-4">
+        <p-dropdown [options]="bairros" [style]="{'width': '100%'}" data-key="endereco.bairro" [(ngModel)]="bairroSelecionado" optionLabel="nome" optionDisabled="inativo" placeholder="Bairro" autocomplete="shipping region"></p-dropdown>
+    </div>
+    <div class="p-col-12">
+        <span class="p-float-label">
+            <input id="referencia-input" type="text" [(ngModel)]="endereco.ponto_referencia" pInputText [style]="{'width': '100%'}" autocomplete="address-line2"> 
+            <label for="referencia-input">Ponto de Referência</label>
+        </span>
+    </div>
+    <div class="p-col-4">
+        <span class="p-float-label">
+            <p-inputNumber id="numero-input" [(ngModel)]="endereco.numero" [showButtons]="true" [min]="0" [style]="{'width': '100%'}" mode="decimal"></p-inputNumber>
+            <label for="numero-input">Número</label>
+        </span>
+    </div>
+    <div class="p-col-8">
+        <span class="p-float-label">
+            <p-inputMask id="telefone-input" mask="(99)99999-9999" [(ngModel)]="endereco.numero_telefone" [style]="{'width': '100%'}" autocomplete="tel"></p-inputMask>
+            <label for="telefone-input">Telefone Contato</label>
+        </span>
+    </div>
+    <div class="p-col-8">
+        <button pButton label="Editar Endereço" (click)="editarEndereco()" [style]="{'width': '100%'}" icon="pi pi-map-marker"></button>
+    </div>
+    <div class="p-col-4">
+        <button pButton label="Cancelar" class="p-button-danger" (click)="cancelar()" [style]="{'width': '100%'}" icon="pi pi-times"></button>
+    </div>
+</div>

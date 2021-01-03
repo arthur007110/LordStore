@@ -120,7 +120,6 @@ export class CarrinhoComponent implements OnInit {
           let time = timer(500, 1000).subscribe(() =>{
             this.produtos.forEach((produto_f, index) =>{
               if(produto.codigo == produto_f.codigo){
-                console.log(index)
                 if (index > -1) {
                   this.produtos.splice(index, 1);
                 }

@@ -3,6 +3,7 @@ import { MessageService, PrimeNGConfig, SelectItem } from 'primeng/api';
 import { ProdutoService } from 'src/app/Servicos/produto.service';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { PedidoService } from 'src/app/Servicos/pedido.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -11,11 +12,20 @@ import { PedidoService } from 'src/app/Servicos/pedido.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private primengConfig: PrimeNGConfig,
-              public produtoService: ProdutoService,
-              public clienteService: ClienteService,
-              private messageService: MessageService,
-              private pedidosService: PedidoService) { }
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    public produtoService: ProdutoService,
+    public clienteService: ClienteService,
+    private messageService: MessageService,
+    private pedidosService: PedidoService,
+    private titleService: Title
+    ) {
+      this.titleService.setTitle(this.title);
+      this.clienteService.getNomeCliente().subscribe((nome: any) =>{
+        this.cliente_nome = nome;
+        this.titleService.setTitle(this.title + ' Bem Vind@ '+this.cliente_nome);
+      });
+    }
 
   produtos: any[];
 
@@ -28,6 +38,10 @@ export class HomeComponent implements OnInit {
   sortKey: string;
 
   texto_filtro: string = "";
+
+  cliente_nome: string = "";
+
+  title = 'LordStore';
     
   ngOnInit() {
     this.produtoService.getProdutos().subscribe(data => this.produtos = data);

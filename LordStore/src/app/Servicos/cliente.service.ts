@@ -4,13 +4,12 @@ import { Produto } from '../Modelos/Produto';
 import { AuthService } from './auth.service';
 import * as firebase from 'firebase/app';
 import { ProdutoService } from './produto.service';
-import { interval, Observable } from 'rxjs';
+import { interval, Observable, timer } from 'rxjs';
 import { Pedido } from '../Modelos/Pedido';
 import { MetodoPagamento } from '../Modelos/MetodoPagamento';
 import { Situacao } from '../Modelos/Situacao';
 import { Endereco } from '../Modelos/Endereco';
 import { PedidoService } from './pedido.service';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -42,10 +41,8 @@ export class ClienteService {
               public afs: AngularFirestore,
               private produtoService: ProdutoService,
               private pedidosService: PedidoService) { 
-
     this.cliente = authService.clienteData;
     this.verificarUsuario();
-
   }
 
   adicionarProdutoAoCarrinho(produto: Produto){
@@ -110,6 +107,88 @@ export class ClienteService {
     }
   }
 
+  cadastrarEndereco(endereco: any){
+    return new Observable(observer =>{
+      let endereco_bd = {
+        id: endereco.id,
+        cliente_id: endereco.cliente_id,
+        rua: endereco.rua,
+        bairro: endereco.bairro,
+        numero: endereco.numero,
+        ponto_referencia: endereco.ponto_referencia,
+        numero_telefone: endereco.numero_telefone
+      }
+  
+      this.getClienteRef().update({
+        "enderecos": firebase.default.firestore.FieldValue.arrayUnion(endereco_bd)
+      }).then(() =>{
+        observer.next("adicionado");
+      }).catch(() =>{
+        observer.next("erro");
+      });
+    });
+  }
+
+  excluirEndereco(endereco_id: string){
+    return new Observable(observer =>{
+      this.getClienteRef().get().subscribe(valor =>{
+        valor.data().enderecos.forEach((Dendereco: any) => {
+          if(Dendereco.id == endereco_id){
+            this.getClienteRef().update({
+              "enderecos": firebase.default.firestore.FieldValue.arrayRemove(Dendereco)
+            }).then(()=>{
+              observer.next('excluido');
+            }).catch(error =>{
+              observer.next('erro')
+            });
+          }
+        });
+      });
+    });
+  }
+
+  editarEndereco(endereco_novo: any, endereco_antigo: any){
+    return new Observable(observer =>{
+      let endereco_bd = {
+        id: endereco_novo.id,
+        cliente_id: endereco_novo.cliente_id,
+        rua: endereco_novo.rua,
+        bairro: endereco_novo.bairro,
+        numero: endereco_novo.numero,
+        ponto_referencia: endereco_novo.ponto_referencia,
+        numero_telefone: endereco_novo.numero_telefone
+      }
+
+      this.getClienteRef().get().subscribe(valor =>{
+        valor.data().enderecos.forEach((Dendereco: any) => {
+          if(Dendereco.id == endereco_bd.id){
+            this.getClienteRef().update({
+              "enderecos": firebase.default.firestore.FieldValue.arrayRemove(Dendereco)
+            }).then(() =>{
+              this.getClienteRef().update({
+                "enderecos": firebase.default.firestore.FieldValue.arrayUnion(endereco_bd)
+              }).then(() =>{
+                observer.next('editado');
+              }).catch(erro =>{
+                observer.next('erro');
+              });
+            }).catch(erro =>{
+              observer.next('erro');
+            });
+          }
+        });
+      });
+    });
+  }
+
+  getEnderecos(){
+    return new Observable(observer =>{
+      this.getClienteRef().valueChanges().subscribe(cliente =>{
+        observer.next(cliente.enderecos);
+      });
+    });
+  }
+
   gerarPedido(produtos: any, metodo_pagamento: MetodoPagamento, endereco: Endereco){
 
     this.analisarEstoqueProdutos(produtos).subscribe(estoque =>{
@@ -126,7 +205,6 @@ export class ClienteService {
         this.pedidosService.criarPedido(pedido);
       }
     });
-
   }
 
   analisarEstoqueProdutos(produtos: any){
@@ -159,7 +237,7 @@ export class ClienteService {
   getNomeCliente(){
     return new Observable(observer =>{
       let clienteRef = this.getClienteRef();
-      if(clienteRef){
+      if(clienteRef && this.cliente.uid != "temp"){
         clienteRef.valueChanges().subscribe(cliente =>{
           observer.next(cliente.nome);
         });
@@ -385,5 +463,10 @@ export class ClienteService {
         });
       });
     }
+  }
+  deslogar(){
+    this.criar_usuario_temporario();
+    this.limpartCache();
+    this.authService.SignOut();
   }
 }

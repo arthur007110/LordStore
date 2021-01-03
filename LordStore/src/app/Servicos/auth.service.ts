@@ -4,6 +4,7 @@ import * as firebase from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { ClienteService } from './cliente.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,7 @@ export class AuthService {
       .then((result) => {
         this.ngZone.run(() => {
           this.router.navigate(['']);
+          //window.location.reload();
         });
 
         let cliente_cache = JSON.parse(localStorage.getItem('cliente')!);
@@ -99,6 +101,7 @@ export class AuthService {
     .then((result) => {
        this.ngZone.run(() => {
           this.router.navigate(['']);
+          //window.location.reload();
         })
       this.SetClienteData(result.user, '');
     }).catch((error) => {
@@ -138,6 +141,7 @@ export class AuthService {
       this.clienteData = null;
       localStorage.clear();
       this.router.navigate(['']);
+      window.location.reload();
     })
   }
 

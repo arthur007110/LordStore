@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { Categoria } from 'src/app/Modelos/Categoria';
 import { Produto } from 'src/app/Modelos/Produto';
 import { TipoProduto } from 'src/app/Modelos/TipoProduto';
@@ -22,12 +22,14 @@ export class MenuComponent implements OnInit {
               public produtoService: ProdutoService,
               public authService: AuthService,
               private db: AngularFirestore,
-              private clienteService: ClienteService) { }
+              public clienteService: ClienteService) { }
 
   items_menu: MenuItem[];
   items_perfil: MenuItem[];
   carrinho: number = 0;
   logado: boolean = false;
+
+  userName = "";
 
   @Output() filtroEvent = new EventEmitter<string>();
 
@@ -109,6 +111,10 @@ export class MenuComponent implements OnInit {
         this.carrinho = valor;
       });
     }
+
+    this.clienteService.getNomeCliente().subscribe((nome: any) =>{
+      this.userName = nome;
+    });
     
 
     this.items_menu = [
@@ -218,9 +224,22 @@ export class MenuComponent implements OnInit {
     }},
     {separator: true},
     {label: 'Sair', icon: 'fa fa-sign-out-alt', command: () => {
-      this.authService.SignOut();
+      this.clienteService.deslogar();
     }}];
     this.logado = this.authService.isLoggedIn;
+
+    this.verificarUsuario();
+
+  }
+
+  verificarUsuario(){
+    let time = timer(1000, 1000).subscribe(() =>{
+      if(this.authService.isLoggedIn && this.clienteService.cliente.uid == "temp"){
+        window.location.reload();
+      }
+      time.unsubscribe();
+    });
+    
   }
 
   goToPerfil(){

@@ -1,5 +1,6 @@
 <app-menu></app-menu>
-
+<p-toast position="top-left"></p-toast>
+<p-confirmDialog header="Excluir" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <p-dataView [value]="enderecos" [paginator]="true" [rows]="9" emptyMessage = "Você Ainda Não Possui Endereços">
     <p-header>
         Meus Endereços
@@ -20,8 +21,8 @@
         </div>
         <div class="p-col-2" style="display:flex !important;justify-content:center !important;align-items:center !important;">
             <span class="p-buttonset">
-                <button pButton label="Editar" class="p-button-rounded p-button-secondary p-button-outlined" [style]="{'width': '50%'}"></button>
-                <button pButton label="Excluir" class="p-button-rounded p-button-danger p-button-outlined" [style]="{'width': '50%'}"></button>
+                <button pButton label="Editar" class="p-button-rounded p-button-secondary p-button-outlined" (click)="editarEndereco(endereco)" [style]="{'width': '50%'}"></button>
+                <button pButton label="Excluir" class="p-button-rounded p-button-danger p-button-outlined" (click)="excluirEndereco(endereco)" [style]="{'width': '50%'}"></button>
             </span>
         </div>
         <div class="p-col-12"></div>
