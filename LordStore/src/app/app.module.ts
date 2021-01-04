@@ -42,6 +42,7 @@ import { MessageService } from 'primeng/api';
 import {InputMaskModule} from 'primeng/inputmask';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {VirtualScrollerModule} from 'primeng/virtualscroller';
 
 //Componentes
 import { LoginComponent } from './Componentes/login/login.component';
@@ -58,6 +59,8 @@ import { CarrinhoComponent } from './Componentes/carrinho/carrinho.component'
 import { FinalizarPedidoComponent } from './Componentes/finalizar-pedido/finalizar-pedido.component';
 import { CadastrarEnderecoComponent } from './Componentes/cadastrar-endereco/cadastrar-endereco.component';
 import { EditarEnderecoComponent } from './Componentes/editar-endereco/editar-endereco.component';
+import { ChatComponent } from './Componentes/chat/chat.component';
+import { SelecionarEnderecoComponent } from './Componentes/selecionar-endereco/selecionar-endereco.component';
 
 // Rotas das Páginas
 const routes: Routes = [
@@ -69,6 +72,7 @@ const routes: Routes = [
   { path: 'carrinho', component: CarrinhoComponent },//Tela de Listagem do Carinho
   { path: 'validar-email', component: ValidarEmailComponent },//Tela de Validação de Email
   { path: 'redefinir-senha', component: RedefinirSenhaComponent },//Tela de Redefinição de Senha
+  { path: 'finalizar-pedido', component: FinalizarPedidoComponent },//Tela de Redefinição de Senha
   { path: '', component: HomeComponent },//Tela de Login
   { path: '**', component: LoginComponent },//404 Not Found Page
 ];
@@ -89,7 +93,9 @@ const routes: Routes = [
     CarrinhoComponent,
     FinalizarPedidoComponent,
     CadastrarEnderecoComponent,
-    EditarEnderecoComponent
+    EditarEnderecoComponent,
+    ChatComponent,
+    SelecionarEnderecoComponent
   ],
   imports: [
     BrowserModule,
@@ -119,6 +125,7 @@ const routes: Routes = [
     InputMaskModule,
     InputNumberModule,
     ConfirmDialogModule,
+    VirtualScrollerModule,
 
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),

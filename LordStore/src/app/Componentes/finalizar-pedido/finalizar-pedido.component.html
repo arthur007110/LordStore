@@ -1,1 +1,49 @@
-<p>finalizar-pedido works!</p>
+<app-menu></app-menu>
+<p-confirmDialog header="Termos de Serviço" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-card header="Finalizar Pedido">
+    <div class="p-grid">
+        <div class="p-col-6">
+            <p-card>
+                <p-virtualScroller [value]="produtos" scrollHeight="250px" [itemSize]="120">
+                    <ng-template pTemplate="header">
+                        <div class="p-d-flex p-ai-center p-jc-between">
+                            Produtos
+                            <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Ordenar Por" (onChange)="onSortChange()" [style]="{'min-width':'10em'}"></p-dropdown>
+                        </div>
+                    </ng-template>
+                    <ng-template let-produto pTemplate="item" let-i="index">
+                        <div class="product-item">
+                            <div class="image-container">
+                                <img src="{{produto.imagem}}" [alt]="produto.nome" class="product-image" />
+                            </div>
+                            <div class="product-list-detail">
+                                <h5 class="p-mb-2">{{produto.nome}}</h5>
+                                <i class="pi pi-tag product-category-icon"></i>
+                                <span class="product-category">{{produto.categoria.nome}}</span>
+                            </div>
+                            <div class="product-list-action">
+                                <h6 class="p-mb-2">{{produto.preco | currency:'BRL':'symbol'}}</h6>
+                                <div class="p-mb-2"><b>{{produto.quantidade_comprar}}</b></div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-virtualScroller>
+            </p-card>
+        </div>
+        <div class="p-col-6">
+            <p-card>
+                <app-selecionar-endereco></app-selecionar-endereco>
+            </p-card>
+        </div>
+        <div class="p-col-12">
+            <div class="p-grid">
+                <div class="p-col-6 p-d-flex p-jc-between">
+                    <p-checkbox [binary]="true" label="Você Aceita Nossos Termos de Serviço?" (onChange)="showTermos()" [(ngModel)]="termosServico"></p-checkbox>
+                </div>
+                <div class="p-col-6">
+                    <button pButton label="Confirmar Pedido" [style]="{'width': '100%'}" [disabled]="!termosServico" (click)="check()" ></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>

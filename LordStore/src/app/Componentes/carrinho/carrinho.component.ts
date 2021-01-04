@@ -5,6 +5,7 @@ import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { ProdutoService } from 'src/app/Servicos/produto.service';
 import { delay } from 'rxjs/operators';
 import { timer } from 'rxjs';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-carrinho',
   templateUrl: './carrinho.component.html',
@@ -24,8 +25,11 @@ export class CarrinhoComponent implements OnInit {
 
   activityValues: number[] = [0, 100];
 
-  constructor(private confirmationService: ConfirmationService,
-              private clienteService: ClienteService) { }
+  constructor(
+    private confirmationService: ConfirmationService,
+    private clienteService: ClienteService,
+    private router: Router
+    ) { }
 
   ngOnInit() {
     if(this.clienteService.getClienteUID() == "temp"){
@@ -77,7 +81,7 @@ export class CarrinhoComponent implements OnInit {
     })
   }
   comprarSelecionados(){
-    
+    this.router.navigate(['finalizar-pedido'], { state: {produtos: this.selectedProdutos} });
   }
 
   aumentarQuantidade(produto: Produto){

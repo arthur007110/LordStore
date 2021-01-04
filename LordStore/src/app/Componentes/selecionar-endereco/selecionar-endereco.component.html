@@ -1,0 +1,31 @@
+<p-dataView [value]="enderecos" [paginator]="true" [rows]="9" emptyMessage = "Você Ainda Não Possui Endereços">
+    <p-header>
+        Meus Endereços
+    </p-header>
+    <ng-template let-endereco pTemplate="listItem">
+        <div class="p-col-10">
+            <div class="box" style="text-align: center;">
+                <b *ngIf="nome_cliente">
+                    {{nome_cliente}}
+                    <span *ngIf="endereco.numero_telefone">
+                        , {{endereco.numero_telefone}}
+                    </span>
+                    <br>
+                </b>
+                <i class="pi pi-map-marker"></i>
+                Endereço: {{endereco.rua}}, {{endereco.numero}}, {{endereco.bairro}}
+            </div>
+        </div>
+        <div class="p-col-2" style="display:flex !important;justify-content:center !important;align-items:center !important;">
+            <button pButton label="Selecionar" class="p-button-rounded p-button-primary p-button-outlined" (click)="selecionarEndereco(endereco)" [style]="{'width': '100%'}"></button>
+        </div>
+        <div class="p-col-12"></div>
+    </ng-template>
+    <p-footer style="display:flex !important;justify-content:center !important;align-items:center !important;">
+        <div class="p-grid p-jc-end" >
+            <div class="p-col">
+                <button pButton icon="pi pi-plus" label="Adicionar Endereço" (click)="cadastrarEndereco()"></button>
+            </div>
+        </div>
+    </p-footer>
+</p-dataView>

@@ -1,5 +1,5 @@
 <app-menu></app-menu>
-<p-table #dt [value]="produtos" [(selection)]="selectedProdutos" dataKey="id" styleClass="p-datatable-customers" [rowHover]="true"
+<p-table #dt [value]="produtos" [(selection)]="selectedProdutos" dataKey="codigo" styleClass="p-datatable-customers" [rowHover]="true"
     [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,15]" [loading]="loading"
     [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} Produtos"
     [filterDelay]="0" [globalFilterFields]="['nome']">
@@ -10,7 +10,7 @@
                 <i class="pi pi-search"></i>
                 <input  pInputText type="text" [(ngModel)]="inputText" (input)="dt.filterGlobal(inputText, 'contains')" placeholder="Global Search" />
             </span>
-            <button pButton type="button" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
+            <button pButton type="button" label="Comprar Selecionados" (click)="comprarSelecionados()" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
         </div>
         <div class="table-header vertical" style="text-align: center; display: block;">
             Carrinho
@@ -19,7 +19,7 @@
                 <i class="pi pi-search"></i>
                 <input pInputText type="text" [style]="{'width': '100%'}" [(ngModel)]="inputText" (input)="dt.filterGlobal(inputText, 'contains')" placeholder="Global Search" />
             </span>
-            <button pButton type="button" [style]="{'width': '100%'}" label="Comprar Selecionados" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
+            <button pButton type="button" [style]="{'width': '100%'}" label="Comprar Selecionados" (click)="comprarSelecionados()" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
         </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -72,8 +72,8 @@
         <tr class="p-selectable-row" style="padding-top: 0;">
             <td>
 
-                <!--<p-tableCheckbox [value]="produto"></p-tableCheckbox>-->
-                <p-checkbox value="{{produto.codigo}}" [(ngModel)]="selectedProdutos"></p-checkbox>
+                <p-tableCheckbox [value]="produto"></p-tableCheckbox>
+                <!--<p-checkbox value="{{produto}}" [(ngModel)]="selectedProdutos"></p-checkbox>-->
             </td>
             <td>
                 <span class="p-column-title">nome</span>
@@ -114,6 +114,6 @@
     </ng-template>
 </p-table>
 <p-card>
-    <button pButton type="button" [style]="{'width': '100%'}" label="Comprar Selecionados" *ngIf="produtos.length>0" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
+    <button pButton type="button" [style]="{'width': '100%'}" label="Comprar Selecionados" (click)="comprarSelecionados()" *ngIf="produtos.length>0" class="p-button-primary" icon="fas fa-money-bill-wave"></button>
 </p-card>
 <app-rodape></app-rodape>
