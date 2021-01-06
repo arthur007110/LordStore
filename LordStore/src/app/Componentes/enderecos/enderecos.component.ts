@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
+import { timer } from 'rxjs';
 import { AuthService } from 'src/app/Servicos/auth.service';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { CadastrarEnderecoComponent } from '../cadastrar-endereco/cadastrar-endereco.component';
@@ -40,9 +41,13 @@ export class EnderecosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.clienteService.getEnderecos().subscribe((enderecos: any) =>{
-      this.enderecos = enderecos;
+    let time = timer(200, 1000).subscribe(() =>{
+      if(this.clienteService.cliente != undefined){
+        this.clienteService.getEnderecos().subscribe((enderecos: any) =>{
+          this.enderecos = enderecos;
+        });
+        time.unsubscribe();
+      }
     });
   }
 

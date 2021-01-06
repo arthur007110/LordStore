@@ -33,32 +33,20 @@ export class CarrinhoComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    if(this.clienteService.getClienteUID() == "temp"){
-      this.atualizarProdutosTemp();
-      this.loading = false;
-    }else{
-      this.clienteService.getClienteRef().get().subscribe(valor =>{
-        this.produtos = valor.data().carrinho.produtos;
-        this.loading = false;
-      });
-    }
+    let time = timer(200, 1000).subscribe(() =>{
+      if(this.clienteService.cliente != undefined){
+        this.clienteService.getClienteRef().get().subscribe(valor =>{
+          this.produtos = valor.data().carrinho.produtos;
+          this.loading = false;
+        });
+        time.unsubscribe();
+      }
+    });
     
     /*this.produtoService.getProdutos().subscribe((produtos: any) => {
         this.produtos = produtos;
         this.loading = false;
     });*/
-  }
-  atualizarProdutosTemp(){
-      this.produtos = this.clienteService.getProdutosClienteTemp();
-      if(this.produtos != undefined){
-        try{
-          if(this.produtos[0].codigo == '00000'){
-            this.produtos.splice(0, 1);
-          }
-        }catch(e){
-
-        }
-      }
   }
   /*ngDoCheck(){
     if(this.produtos != undefined && this.produtos != null){
@@ -92,21 +80,11 @@ export class CarrinhoComponent implements OnInit {
   }
 
   aumentarQuantidade(produto: Produto){
-    if(this.clienteService.getClienteUID() == 'temp'){
-      this.clienteService.aumentarQuantidadeProdutoTemp(produto);
-      this.atualizarProdutosTemp();
-    }else{
-      this.clienteService.aumentarQuantidadeProduto(produto);
-    }
+    this.clienteService.aumentarQuantidadeProduto(produto);
   }
 
   diminuirQuantidade(produto: Produto){
-    if(this.clienteService.getClienteUID() == 'temp'){
-      this.clienteService.diminuirQuantidadeProdutoTemp(produto);
-      this.atualizarProdutosTemp();
-    }else{
-      this.clienteService.diminuirQuantidadeProduto(produto);
-    }
+    this.clienteService.diminuirQuantidadeProduto(produto);
   }
 
   removerProduto(event: Event, produto: Produto){
@@ -121,24 +99,17 @@ export class CarrinhoComponent implements OnInit {
       acceptLabel: 'Remover',
       rejectLabel: 'Não',
       accept: () => {
-        if(this.clienteService.getClienteUID() == "temp"){
-          let time = timer(500, 1000).subscribe(() =>{
-            this.diminuirQuantidade(produto);
-            time.unsubscribe();
-          });
-        }else{
-          this.diminuirQuantidade(produto);
-          let time = timer(500, 1000).subscribe(() =>{
-            this.produtos.forEach((produto_f, index) =>{
-              if(produto.codigo == produto_f.codigo){
-                if (index > -1) {
-                  this.produtos.splice(index, 1);
-                }
+        this.diminuirQuantidade(produto);
+        let time = timer(500, 1000).subscribe(() =>{
+          this.produtos.forEach((produto_f, index) =>{
+            if(produto.codigo == produto_f.codigo){
+              if (index > -1) {
+                this.produtos.splice(index, 1);
               }
-            });
-            time.unsubscribe();
+            }
           });
-        }
+          time.unsubscribe();
+        });
       },
       reject: () => {
       }

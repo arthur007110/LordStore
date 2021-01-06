@@ -43,6 +43,7 @@ import {InputMaskModule} from 'primeng/inputmask';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {VirtualScrollerModule} from 'primeng/virtualscroller';
+import {GalleriaModule} from 'primeng/galleria';
 
 //Componentes
 import { LoginComponent } from './Componentes/login/login.component';
@@ -126,6 +127,7 @@ const routes: Routes = [
     InputNumberModule,
     ConfirmDialogModule,
     VirtualScrollerModule,
+    GalleriaModule,
 
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),

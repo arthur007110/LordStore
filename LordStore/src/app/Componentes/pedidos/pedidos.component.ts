@@ -28,12 +28,15 @@ export class PedidosComponent implements OnInit {
     if(!this.authService.isLoggedIn){
       this.router.navigate(['']);
     }else{
-      let cliente_uid = this.clienteService.getClienteUID();
-      if(cliente_uid != "temp"){
-        this.pedidoService.getPedidosCliente(cliente_uid).subscribe(pedidos =>{
-          this.pedidos = pedidos;
-        });
-      }
+      let time = timer(200, 1000).subscribe(() =>{
+        if(this.clienteService.cliente != undefined){
+          let cliente_uid = this.clienteService.getClienteUID();
+          this.pedidoService.getPedidosCliente(cliente_uid).subscribe(pedidos =>{
+            this.pedidos = pedidos;
+          });
+          time.unsubscribe();
+        }
+      });
     }
   }
 

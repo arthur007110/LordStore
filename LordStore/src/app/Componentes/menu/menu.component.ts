@@ -33,18 +33,6 @@ export class MenuComponent implements OnInit {
 
   @Output() filtroEvent = new EventEmitter<string>();
 
-  ngDoCheck() {
-    if(this.clienteService.cliente.uid == "temp" && this.clienteService.cliente.carrinho.produtos.length !=0){
-      if(this.clienteService.cliente.carrinho.produtos[0].codigo == '00000'){
-        this.carrinho = this.clienteService.cliente.carrinho.produtos.length-1;
-      }
-    }
-  }
-
-  mostrarCarrinho(){
-    console.log(this.clienteService.cliente)
-  }
-
   irParaLogin(){
     this.router.navigate(['login']);
   }
@@ -59,7 +47,6 @@ export class MenuComponent implements OnInit {
   }
 
   exibirRegistros(){
-    console.log("Y")
     this.db.collection("Clientes").snapshotChanges().subscribe(clientes =>{
       clientes.forEach(cliente => {
         console.log(cliente.payload.doc.data());
@@ -72,7 +59,6 @@ export class MenuComponent implements OnInit {
   }
 
   criarProduto(){
-    console.log('1')
     let produto = new Produto("codigo", "Bermuda Degradê", "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ_gIbQ3i0tviR184SByrgHaUysalNeQD2Oz2QTv8aC87yFr9oGoVuUrvlg97qdGOb3X-nA_3YmRLvZed-bj9Ud_w9PwA6GpNENHkLQKT27wVO7xT3aKGRp&usqp=CAE", 25, 0, new TipoProduto("Bermuda"), new Categoria("ROUPAS"), 0);
 
     let record = {
@@ -102,20 +88,18 @@ export class MenuComponent implements OnInit {
         this.carrinho = cliente.carrinho.produtos.length;
       }
     })*/
-    if(this.clienteService.getClienteUID() == "temp"){
-      this.clienteService.getQuantidadeProutosCarrinhoTemp().subscribe(valor =>{
-        this.carrinho = valor;
-      });
-    }else{
-      this.clienteService.getQuantidadeProutosCarrinho().subscribe(valor =>{
-        this.carrinho = valor;
-      });
-    }
-
-    this.clienteService.getNomeCliente().subscribe((nome: any) =>{
-      this.userName = nome;
-    });
+    let time = timer(200, 1000).subscribe(() =>{
+      if(this.clienteService.cliente != undefined){
+        this.clienteService.getQuantidadeProutosCarrinho().subscribe(valor =>{
+          this.carrinho = valor;
+        });
     
+        this.clienteService.getNomeCliente().subscribe((nome: any) =>{
+          this.userName = nome;
+        });
+        time.unsubscribe();
+      }
+    });
 
     this.items_menu = [
       {
@@ -228,13 +212,13 @@ export class MenuComponent implements OnInit {
     }}];
     this.logado = this.authService.isLoggedIn;
 
-    this.verificarUsuario();
+    //this.verificarUsuario();
 
   }
 
   verificarUsuario(){
     let time = timer(1000, 1000).subscribe(() =>{
-      if(this.authService.isLoggedIn && this.clienteService.cliente.uid == "temp"){
+      if(this.authService.isLoggedIn && this.clienteService.cliente == undefined){
         window.location.reload();
       }
       time.unsubscribe();

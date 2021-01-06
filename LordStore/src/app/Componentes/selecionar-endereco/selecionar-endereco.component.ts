@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
+import { timer } from 'rxjs';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { CadastrarEnderecoComponent } from '../cadastrar-endereco/cadastrar-endereco.component';
 
@@ -32,9 +33,13 @@ export class SelecionarEnderecoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.clienteService.getEnderecos().subscribe((enderecos: any) =>{
-      this.enderecos = enderecos;
+    let time = timer(200, 1000).subscribe(() =>{
+      if(this.clienteService.cliente != undefined){
+        this.clienteService.getEnderecos().subscribe((enderecos: any) =>{
+          this.enderecos = enderecos;
+        });
+        time.unsubscribe();
+      }
     });
   }
 

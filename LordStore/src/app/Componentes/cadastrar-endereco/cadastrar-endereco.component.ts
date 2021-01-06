@@ -31,7 +31,7 @@ export class CadastrarEnderecoComponent implements OnInit {
   numero: string;
   telefone: string;
   bairroSelecionado: any;
-  referencia: string;
+  referencia: string = "";
 
   constructor(private clienteService: ClienteService,
               private messageService: MessageService,
@@ -43,7 +43,7 @@ export class CadastrarEnderecoComponent implements OnInit {
   criarEndereco(){
     if(this.clienteService.cliente.uid != "temp"){
 
-      if(this.isValid(this.rua) && this.isValid(this.numero) && this.isValid(this.telefone) && this.isValid(this.bairroSelecionado) && this.isValid(this.referencia)){
+      if(this.isValid(this.rua) && this.isValid(this.numero) && this.isValid(this.telefone) && this.isValid(this.bairroSelecionado)){
         let novoEndereco = new Endereco(uid(15),this.clienteService.cliente.uid, this.rua, this.bairroSelecionado.nome, this.numero, this.referencia, this.telefone);
         this.clienteService.cadastrarEndereco(novoEndereco).subscribe(status =>{
           if(status == 'adicionado'){

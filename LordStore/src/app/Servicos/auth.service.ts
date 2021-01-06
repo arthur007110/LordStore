@@ -4,7 +4,6 @@ import * as firebase from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { ClienteService } from './cliente.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +19,7 @@ export class AuthService {
     /* Saving user data in localstorage when 
     logged in and setting up null when logged out */
     this.afAuth.authState.subscribe(cliente => {
+      console.log(cliente)
       if (cliente) {
         this.clienteData = cliente;
         localStorage.setItem('cliente', JSON.stringify(this.clienteData));

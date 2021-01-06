@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
       this.titleService.setTitle(this.title);
       this.clienteService.getNomeCliente().subscribe((nome: any) =>{
         this.cliente_nome = nome;
-        this.titleService.setTitle(this.title + ' Bem Vind@ '+this.cliente_nome);
+        this.titleService.setTitle(this.title + ' ('+ this.cliente_nome + ')');
       });
     }
 
