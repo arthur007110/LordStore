@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfirmationService, FilterMatchMode, PrimeNGConfig } from 'primeng/api';
+import { ConfirmationService, FilterMatchMode, MessageService, PrimeNGConfig } from 'primeng/api';
 import { Produto } from 'src/app/Modelos/Produto';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { ProdutoService } from 'src/app/Servicos/produto.service';
@@ -28,7 +28,8 @@ export class CarrinhoComponent implements OnInit {
   constructor(
     private confirmationService: ConfirmationService,
     private clienteService: ClienteService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
     ) { }
 
   ngOnInit() {
@@ -81,7 +82,13 @@ export class CarrinhoComponent implements OnInit {
     })
   }
   comprarSelecionados(){
-    this.router.navigate(['finalizar-pedido'], { state: {produtos: this.selectedProdutos} });
+    if(this.selectedProdutos){
+      if(this.selectedProdutos.length != 0){
+        this.router.navigate(['finalizar-pedido'], { state: {produtos: this.selectedProdutos} });
+      }
+    }else {
+      this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'selecione o(s) produto(s) que deseja comprar antes de finalizar a compra', icon: 'pi pi-times-circle', life: 3000});
+    }
   }
 
   aumentarQuantidade(produto: Produto){

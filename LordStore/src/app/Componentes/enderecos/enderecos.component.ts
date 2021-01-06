@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
+import { AuthService } from 'src/app/Servicos/auth.service';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { CadastrarEnderecoComponent } from '../cadastrar-endereco/cadastrar-endereco.component';
 import { EditarEnderecoComponent } from '../editar-endereco/editar-endereco.component';
@@ -24,10 +26,17 @@ export class EnderecosComponent implements OnInit {
     private clienteService: ClienteService,
     public dialogService: DialogService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService) {
-    clienteService.getNomeCliente().subscribe(nome =>{
-      this.nome_cliente = nome;
-    });
+    private confirmationService: ConfirmationService,
+    private authService: AuthService,
+    private router: Router
+    ) {
+      if(!authService.isLoggedIn){
+        router.navigate(['']);
+      }else{
+        clienteService.getNomeCliente().subscribe(nome =>{
+          this.nome_cliente = nome;
+        });
+      }
   }
 
   ngOnInit(): void {

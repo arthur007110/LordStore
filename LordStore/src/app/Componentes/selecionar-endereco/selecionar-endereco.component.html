@@ -1,4 +1,4 @@
-<p-dataView [value]="enderecos" [paginator]="true" [rows]="9" emptyMessage = "Você Ainda Não Possui Endereços">
+<p-dataView [value]="enderecos" [paginator]="true" [rows]="3" emptyMessage = "Você Ainda Não Possui Endereços">
     <p-header>
         Meus Endereços
     </p-header>
@@ -17,7 +17,8 @@
             </div>
         </div>
         <div class="p-col-2" style="display:flex !important;justify-content:center !important;align-items:center !important;">
-            <button pButton label="Selecionar" class="p-button-rounded p-button-primary p-button-outlined" (click)="selecionarEndereco(endereco)" [style]="{'width': '100%'}"></button>
+            <button pButton label="Selecionar" class="p-button-rounded p-button-primary p-button-outlined" *ngIf="endereco.id != enderecoSelecionadoId" (click)="selecionarEndereco(endereco)" [style]="{'width': '100%'}"></button>
+            <button pButton label="Escolhido" class="p-button-rounded p-button-success p-button-outlined" *ngIf="endereco.id == enderecoSelecionadoId" [disabled]= "false" [style]="{'width': '100%'}"></button>
         </div>
         <div class="p-col-12"></div>
     </ng-template>

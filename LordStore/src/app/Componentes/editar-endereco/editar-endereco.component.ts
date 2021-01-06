@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { timer } from 'rxjs';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { from, timer } from 'rxjs';
 import { Endereco } from 'src/app/Modelos/Endereco';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { uid } from 'uid';
@@ -58,7 +59,7 @@ export class EditarEnderecoComponent implements OnInit {
 
       if(this.isValid(this.endereco.rua) && this.isValid(this.endereco.numero) && this.isValid(this.endereco.numero_telefone) && this.isValid(this.bairroSelecionado) && this.isValid(this.endereco.ponto_referencia)){
         let novoEndereco = new Endereco(this.endereco.id ,this.clienteService.cliente.uid, this.endereco.rua, this.bairroSelecionado.nome, this.endereco.numero, this.endereco.ponto_referencia, this.endereco.numero_telefone);
-        this.clienteService.editarEndereco(novoEndereco, this.endereco_antigo).subscribe(status =>{
+        this.clienteService.editarEndereco(novoEndereco).subscribe(status =>{
           if(status == 'editado'){
             this.messageService.add({severity:'success', summary: 'Tudo Certo!', detail: 'O endereço foi editado', icon: 'pi pi-map-marker', life: 2000});
             this.dialogRef.close();

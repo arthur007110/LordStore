@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { CadastrarEnderecoComponent } from '../cadastrar-endereco/cadastrar-endereco.component';
@@ -11,10 +11,14 @@ import { CadastrarEnderecoComponent } from '../cadastrar-endereco/cadastrar-ende
 })
 export class SelecionarEnderecoComponent implements OnInit {
 
+  @Output() notify: EventEmitter<any> = new EventEmitter<any>();
+
   enderecos = [
     //{rua: 'Praça Manuel Luiz do Nasc', bairro: 'Boa Vista', numero: '87', cep: '55292505', ponto_referencia: 'por trás do cestone', numero_telefone: '(87)996560021'},
     //{rua: 'Praça Manuel Luiz do Nasc', bairro: 'Boa Vista', numero: '87', cep: '55292505', ponto_referencia: 'por trás do cestone'}
   ];
+
+  enderecoSelecionadoId: string;
 
   nome_cliente: any;
 
@@ -35,7 +39,8 @@ export class SelecionarEnderecoComponent implements OnInit {
   }
 
   selecionarEndereco(endereco: any){
-    
+    this.enderecoSelecionadoId = endereco.id;
+    this.notify.emit(endereco);
   }
 
   cadastrarEndereco(){

@@ -147,7 +147,7 @@ export class ClienteService {
     });
   }
 
-  editarEndereco(endereco_novo: any, endereco_antigo: any){
+  editarEndereco(endereco_novo: any){
     return new Observable(observer =>{
       let endereco_bd = {
         id: endereco_novo.id,
@@ -189,39 +189,67 @@ export class ClienteService {
     });
   }
 
-  gerarPedido(produtos: any, metodo_pagamento: MetodoPagamento, endereco: Endereco){
+  gerarPedido(produtos: any, metodo_pagamento: MetodoPagamento, endereco: Endereco, preco_total: number, cupom: any){
+    return new Observable(observer =>{
+      this.analisarEstoqueProdutos(produtos).subscribe(estoque =>{
+        if(estoque){
 
-    this.analisarEstoqueProdutos(produtos).subscribe(estoque =>{
-      if(estoque){
-        let pedido: Pedido = {
-          id: "",
-          cliente_id: this.cliente.uid,
-          produtos: produtos,
-          data: new Date(), //firebase.default.firestore.FieldValue.serverTimestamp(),
-          metodo_pagamento: metodo_pagamento,
-          situacao: new Situacao().situacao[0],
-          endereco: endereco
-        };
-        this.pedidosService.criarPedido(pedido);
-      }
+          if(!cupom){
+            cupom = null;
+          }
+          
+          let pedido: Pedido = {
+            id: "",
+            cliente_id: this.cliente.uid,
+            produtos: produtos,
+            data: new Date(), //firebase.default.firestore.FieldValue.serverTimestamp(),
+            metodo_pagamento: metodo_pagamento,
+            situacao: new Situacao().situacao[0],
+            endereco: endereco,
+            preco_total: preco_total,
+            cupom: cupom
+          };
+          this.pedidosService.criarPedido(pedido).subscribe(status =>{
+            if(status == 'sucesso'){
+              this.rearrumarEstoqueProdutosPedido(produtos).subscribe(status_a =>{
+                if(status == 'sucesso'){
+                  this.removerProdutosCarrinho(produtos).subscribe(status_b =>{
+                    observer.next(status_b);
+                  });
+                }else{
+                  observer.next(status_a);
+                }
+              });
+            }else{
+              observer.next(status);
+            }
+          });
+        }else{
+          observer.next('produtos-sem-estoque');
+        }
+      });
     });
   }
 
   analisarEstoqueProdutos(produtos: any){
     let analiseEstoque = true;
     let produtosAnalisados = 0;
-
+    console.log(3)
     return new Observable(observer =>{
+      console.log(4)
       produtos.forEach((produto: any) => {
+        console.log(5)
         this.quantidadeProdutosDisponivel(produto).subscribe(estoque =>{
+          console.log(6, estoque)
           if(!estoque){
             analiseEstoque = false;
           }
           produtosAnalisados++;
+          console.log('tamanho: ', produtosAnalisados, produtos.length)
+          if(produtosAnalisados == produtos.length){
+            observer.next(analiseEstoque);
+          }
         });
-        if(produtosAnalisados == produtos.length){
-          observer.next(analiseEstoque);
-        }
       });
     });
   }
@@ -230,6 +258,16 @@ export class ClienteService {
     return new Observable(observer =>{
       this.produtoService.getProdutoEstoque(produto).subscribe((quantidade_estoque: any) =>{
         observer.next(produto.quantidade_comprar <= quantidade_estoque);
+      });
+    });
+  }
+
+  rearrumarEstoqueProdutosPedido(produtos: any){
+    return new Observable(observer =>{
+      produtos.forEach((produto: any) => {
+        this.produtoService.rearrumarEstoque(produto, -produto.quantidade_comprar).subscribe(status =>{
+          observer.next(status);
+        });
       });
     });
   }
@@ -341,6 +379,48 @@ export class ClienteService {
             }
           });
         }
+      });
+    });
+  }
+
+  removerProdutosCarrinho(produtos: any){
+    return new Observable(observer =>{
+
+      let erro = false;
+      let indice = 0;
+
+      produtos.forEach((produto: any) => {
+        this.removerProdutoCarrinho(produto).subscribe(status =>{
+          if(status == 'erro'){
+            erro = true;
+          }
+          indice ++;
+          if(produtos.length == indice){
+            if(erro){
+              observer.next('erro');
+            }else{
+              observer.next('sucesso');
+            }
+          }
+        });
+      });
+    });
+  }
+
+  removerProdutoCarrinho(produto: Produto){
+    return new Observable(observer =>{
+      this.getClienteRef().get().subscribe(valor =>{
+        valor.data().carrinho.produtos.forEach((Dproduto: any) => {
+          if(Dproduto.codigo == produto.codigo){
+            this.getClienteRef().update({
+              "carrinho.produtos": firebase.default.firestore.FieldValue.arrayRemove(Dproduto)
+            }).then(() =>{
+              observer.next('sucesso');
+            }).catch(e =>{
+              observer.next('erro');
+            });
+          }
+        });
       });
     });
   }

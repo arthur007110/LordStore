@@ -1,4 +1,5 @@
 <app-menu></app-menu>
+<p-toast position="top-left"></p-toast>
 <p-table #dt [value]="produtos" [(selection)]="selectedProdutos" dataKey="codigo" styleClass="p-datatable-customers" [rowHover]="true"
     [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,15]" [loading]="loading"
     [paginator]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} Produtos"

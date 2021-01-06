@@ -29,19 +29,45 @@
                     </ng-template>
                 </p-virtualScroller>
             </p-card>
+            <br>
+            <div class="p-grid">
+                <div class="p-col-6">
+                    <button pButton label="Preço Total: R${{preco_total}}" *ngIf="desconto == 'SD' || desconto == 'I' || desconto == 'E'" class="p-button-primary p-button-text p-button-outlined" [style]="{'width': '100%', 'font-weight': 'bold', 'font-size': '150%'}"></button>
+                    <button pButton label="Preço Total: R${{preco_total - cupom.desconto}}" *ngIf="desconto == 'VR'" class="p-button-success p-button-text p-button-outlined" [style]="{'width': '100%', 'font-weight': 'bold', 'font-size': '150%'}"></button>
+                    <button pButton label="Preço Total: R${{preco_total - (preco_total * (cupom.desconto/100))}}" *ngIf="desconto == 'VP'" class="p-button-success p-button-text p-button-outlined" [style]="{'width': '100%', 'font-weight': 'bold', 'font-size': '150%'}"></button>
+                </div>
+                <div class="p-col-5">
+                    <span class="p-float-label">
+                        <input id="cupom-input" [(ngModel)]="cupom_desconto" type="text" pInputText [style]="{'width': '100%'}"> 
+                        <label for="cupom-input">Cupom de Desconto</label>
+                    </span>
+                </div>
+                <div class="p-col-1">
+                    <button pButton type="button" icon="pi pi-check" (click)="validar_cupom()" [style]="{'width': '100%'}" iconPos="left"></button>
+                </div>
+                <div class="p-col-12">
+                    <button pButton label="Desconto: {{cupom.desconto}}%" *ngIf="desconto == 'VP'" class="p-button-success p-button-text p-button-outlined" [style]="{'width': '100%', 'font-weight': 'bold', 'font-size': '150%'}"></button>
+                    <button pButton label="Desconto: R${{cupom.desconto}}" *ngIf="desconto == 'VR'" class="p-button-success p-button-text p-button-outlined" [style]="{'width': '100%', 'font-weight': 'bold', 'font-size': '150%'}"></button>
+                    <button pButton label="CUPOM EXPIRADO" *ngIf="desconto == 'E'" class="p-button-warning p-button-text p-button-outlined" [style]="{'width': '100%', 'font-weight': 'bold', 'font-size': '150%'}"></button>
+                    <button pButton label="CUPOM INVALIDO"  *ngIf="desconto == 'I'" class="p-button-danger p-button-text p-button-outlined" [style]="{'width': '100%', 'font-weight': 'bold', 'font-size': '150%'}"></button>
+                </div>
+            </div>
         </div>
         <div class="p-col-6">
             <p-card>
-                <app-selecionar-endereco></app-selecionar-endereco>
+                <app-selecionar-endereco (notify)='selecionarEndereco($event)'></app-selecionar-endereco>
             </p-card>
+            <br>
+            <p-dropdown [options]="metodosPagamento" optionLabel="nome" optionDisabled="inativo" [(ngModel)]="metodoPagamentoSelecionado" placeholder="Selecionar Metodo de Pagamento" [style]="{'width':'100%'}"></p-dropdown>
         </div>
         <div class="p-col-12">
             <div class="p-grid">
                 <div class="p-col-6 p-d-flex p-jc-between">
-                    <p-checkbox [binary]="true" label="Você Aceita Nossos Termos de Serviço?" (onChange)="showTermos()" [(ngModel)]="termosServico"></p-checkbox>
+                    <button pButton label="Clique Para Aceitar Os termos de Serviço" class="p-button-danger p-button-text" *ngIf="!termosServico" [style]="{'width': '100%'}" (click)="mostrarTermos()" ></button>
+                    <button pButton label="Termos de Serviço Aceitos" class="p-button-success p-button-text" *ngIf="termosServico" [style]="{'width': '100%'}" (click)="mostrarTermos()" ></button>
                 </div>
                 <div class="p-col-6">
-                    <button pButton label="Confirmar Pedido" [style]="{'width': '100%'}" [disabled]="!termosServico" (click)="check()" ></button>
+                    <button pButton label="Confirmar Pedido" icon="fa fa-dollar-sign" [style]="{'width': '100%'}" [disabled]="!termosServico" (click)="criarPedido()"></button>
                 </div>
             </div>
         </div>

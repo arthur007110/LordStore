@@ -4,6 +4,7 @@ import { ProdutoService } from 'src/app/Servicos/produto.service';
 import { ClienteService } from 'src/app/Servicos/cliente.service';
 import { PedidoService } from 'src/app/Servicos/pedido.service';
 import { Title } from '@angular/platform-browser';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -46,6 +47,14 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.produtoService.getProdutos().subscribe(data => this.produtos = data);
 
+    let toast = localStorage.getItem('toast');
+    localStorage.removeItem('toast');
+
+    if(toast){
+      console.log(1)
+      this.mostrarToast(JSON.parse(toast));
+    }
+
     this.sortOptions = [
         {label: 'Preços Maiores Para Menores', value: '!preco'},
         {label: 'Preços Menores Para Maiores', value: 'preco'}
@@ -53,6 +62,15 @@ export class HomeComponent implements OnInit {
 
     this.primengConfig.ripple = true;
   }
+
+  mostrarToast(toast: any){
+    console.log(2)
+    let time = timer(500, 1000).subscribe(() =>{
+      this.messageService.add(toast);
+      time.unsubscribe();
+    });
+  }
+
   filtrar(filtro: any){
     //this.texto_filtro = filtro;
     (<HTMLInputElement>document.getElementById("filter")).value = filtro;
@@ -69,13 +87,13 @@ export class HomeComponent implements OnInit {
       if(status == 'adicionado'){
         this.messageService.add({severity:'success', summary: 'Tudo Certo!', detail: 'O produto foi adicionado ao carrinho', icon: 'pi pi-shopping-cart', life: 1000});
       }else if(status == 'semestoque'){
-        this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'O produto encontra-se fora de estoque', life: 1000});
+        this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'O produto encontra-se fora de estoque', icon: 'pi pi-times-circle', life: 1000});
       }else if(status == 'clientetemporario'){
         this.messageService.add({severity:'warn', summary: 'Cliente Temporario Criado!', detail: 'Você não está logado, recomendamos criar uma conta caso não possua, seu produto está no carrinho', icon: 'pi pi-shopping-cart', life: 1000});
       }else if(status == 'erro'){
-        this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'O produto não pode ser adicionado ao carrinho', life: 1000});
+        this.messageService.add({severity:'error', summary: 'Algo deu Errado!', detail: 'O produto não pode ser adicionado ao carrinho', icon: 'pi pi-times-circle', life: 1000});
       }else if(status == 'existe'){
-        this.messageService.add({severity:'warn', summary: 'Algo deu Errado!', detail: 'O produto já está no carrinho', life: 1000});
+        this.messageService.add({severity:'warn', summary: 'Algo deu Errado!', detail: 'O produto já está no carrinho',  life: 1000});
       }
     });
   }

@@ -46,3 +46,11 @@
     border-radius:2%;
     padding: 1px 4px 1px 4px;
 }
+.status-cancelado{
+    text-align: center;
+    background-color: #FFCDD2;
+    color: #CA3737;
+    font-weight: bold;
+    border-radius:2%;
+    padding: 1px 4px 1px 4px;
+}

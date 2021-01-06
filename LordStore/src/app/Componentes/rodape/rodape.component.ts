@@ -9,6 +9,9 @@ export class RodapeComponent implements OnInit {
 
   constructor() { }
 
+  ano: any;
+
   ngOnInit(): void {
+    this.ano = new Date().getFullYear();
   }
 }

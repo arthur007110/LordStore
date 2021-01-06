@@ -1,29 +1,28 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { ProdutoService } from './produto.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PedidoService {
 
-  constructor(private firestore: AngularFirestore) {
+  constructor(
+    private firestore: AngularFirestore,
+    private produtoService: ProdutoService
+    ) {
   }
 
   getPedidosCliente(cliente_id: string){
-    console.log(4);
     return new Observable<any>(observer =>{
-      console.log(5);
       this.getPedidosRef().ref.where('cliente_id', '==', cliente_id).get().then(valores =>{
-        console.log(6, cliente_id);
 
         let pedidos: any[] = [];
         valores.docs.forEach(pedido =>{
-          console.log(7, pedido.data());
           let pedido_a: any = pedido.data();
           pedido_a.id = pedido.id;
           pedidos.push(pedido_a);
-          console.log(pedido_a);
         });
         observer.next(pedidos);
       });
@@ -31,11 +30,52 @@ export class PedidoService {
   }
 
   criarPedido(pedido: any){
-    this.getPedidosRef().add(pedido);
+    return new Observable(observer =>{
+      this.getPedidosRef().add(pedido).then(() =>{
+        observer.next('sucesso');
+      }).catch(e =>{
+        observer.next('erro');
+      })
+    });
+  }
+
+  cancelarPedido(pedido: any){
+    return new Observable<any>(observer =>{
+      this.getPedidoRef(pedido.id).update({
+        "situacao": 'Cancelado'
+      }).then(() =>{
+        this.produtoService.devolverProdutos(pedido.produtos).subscribe(status =>{
+          observer.next(status);
+        });
+      }).catch(e =>{
+        observer.next('erro');
+      });
+    });
+  }
+
+  getPedidoRef(uid: string){
+    return this.firestore.doc(`Peididos/${uid}`);
   }
 
   getPedidosRef(){
-    return this.firestore.collection('Peididos');
+    return this.firestore.collection('Peididos');//Alterar nome!!!!!!!!!!!!!!!!!!!!!!!!
+  }
+
+  getCuponsRef(){
+    return this.firestore.collection('Cupons');
+  }
+
+  validarCupom(cupom: string){
+    return new Observable<any>(observer =>{
+      let query = this.getCuponsRef().ref.where('cupom', '==', cupom).get().then(cupom =>{
+
+        if(cupom.docs.length){
+          observer.next(cupom.docs[0].data());
+        }else{
+          observer.next('INVALIDO');
+        }
+      });
+    });
   }
 
   getSituacaoPedido(pedido: any){
@@ -52,6 +92,8 @@ export class PedidoService {
         return "pedidonaopodeserconfirmado";
       case "Entrega Não Pode Ser Efetuada":
         return "entreganaopodeserefetuada";
+      case "Cancelado":
+        return "cancelado";
       default:
         return "";
     }

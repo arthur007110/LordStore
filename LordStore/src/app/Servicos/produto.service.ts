@@ -71,21 +71,51 @@ export class ProdutoService {
   }
 
   getProdutoRef(id: string){
-    let produtoRef: AngularFirestoreDocument<any> = this.firestore.doc(`Produtos/${id}`);
-
-    return produtoRef;
+    return this.firestore.doc(`Produtos/${id}`);
   }
 
-  rearrumarEstoque(id: string, quantidade: number){
-    this.getProdutoRef(id).update({
-      "quantidade_estoque": firebase.default.firestore.FieldValue.increment(quantidade)
+  rearrumarEstoque(produto: any, quantidade: number){
+    return new Observable(observer =>{
+      this.getUIDbyCodigo(produto.codigo).subscribe(id =>{
+        this.getProdutoRef(id).update({
+          "quantidade_estoque": firebase.default.firestore.FieldValue.increment(quantidade)
+        }).then(() =>{
+          observer.next('sucesso');
+        }).catch(e =>{
+          observer.next('erro');
+        })
+      });
+    });
+  }
+
+  devolverProdutos(produtos: any){
+    return new Observable(observer =>{
+
+      let erro = false;
+      let index = 0;
+
+      produtos.forEach((produto: any) => {
+        this.rearrumarEstoque(produto, produto.quantidade_comprar).subscribe(status =>{
+          if(status == 'erro'){
+            erro = true;
+          }
+          index++;
+          if(produtos.length == index){
+            if(erro){
+              observer.next('erro');
+            }else{
+              observer.next('sucesso');
+            }
+          }
+        });
+      });
     });
   }
 
   getProdutoEstoque(produto: Produto){
     return new Observable(observer =>{
       this.getUIDbyCodigo(produto.codigo).subscribe((id) =>{
-        this.getProdutoRef(id).get().subscribe(valor =>{
+        this.getProdutoRef(id).get().subscribe((valor: any) =>{
           observer.next(valor.data().quantidade_estoque);
           observer.complete();
         });
